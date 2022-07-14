@@ -36,8 +36,10 @@ class _HomePageState extends State<HomePage> {
 
   Widget _titleWidget(value) {
     return Container(
-      height: ScreenAdapter.height(40),
+      height: ScreenAdapter.height(35),
+      //外边距
       margin: EdgeInsets.only(left: ScreenAdapter.width(20)),
+      //边距
       padding: EdgeInsets.only(left: ScreenAdapter.width(20)),
       decoration: BoxDecoration(
           border: Border(
@@ -52,16 +54,48 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //热门推荐
+  Widget _hotProductListWidget() {
+    return Container(
+      height: ScreenAdapter.height(234),
+      padding: EdgeInsets.all(ScreenAdapter.width(20)),
+      width: double.infinity,
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                Container(
+                  height: ScreenAdapter.height(140),
+                  width: ScreenAdapter.width(140),
+                  margin: EdgeInsets.only(right: ScreenAdapter.width(20)),
+                  child: Image.network(
+                      "https://www.itying.com/images/flutter/hot${index + 1}.jpg",
+                      fit: BoxFit.cover),
+                ),
+                Container(
+                  padding: EdgeInsets.only(top:ScreenAdapter.height(10)),
+                  height: ScreenAdapter.height(44),
+                  child: Text("第$index条"),
+                )
+              ],
+            );
+          }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context,designSize: const Size(750,1624));
+    ScreenUtil.init(context, designSize: const Size(750, 1334));
     return ListView(
       children: [
         _swiperWidget(),
-        const SizedBox(height: 10),
+        SizedBox(height: ScreenAdapter.height(12)),
         _titleWidget("猜你喜欢"),
-        const SizedBox(height: 10),
+        SizedBox(height: ScreenAdapter.height(12)),
         _titleWidget("热门推荐"),
+        _hotProductListWidget(),
       ],
     );
   }
