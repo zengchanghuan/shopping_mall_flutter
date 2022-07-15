@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import '../pages/tabs/Tabs.dart';
 import '../pages/search.dart';
+import '../pages/product_list.dart';
 //配置路由
 final Map<String, Function> routes = {
   '/': (context) => const Tabs(),
   '/search': (context) => const Search(),
+  '/productList': (context,{arguments}) => ProductList(arguments:arguments),
+
 
 };
 
