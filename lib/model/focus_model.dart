@@ -31,26 +31,23 @@
   };
   */
 
-
 class FocusModel {
-  List<FocusItemModel>? result;
+  List<FocusItemModel> result = [];
 
-  FocusModel({this.result});
+  FocusModel({required this.result});
 
   FocusModel.fromJson(Map<String, dynamic> json) {
     if (json['result'] != null) {
       result = <FocusItemModel>[];
       json['result'].forEach((v) {
-        result!.add(FocusItemModel.fromJson(v));
+        result.add(FocusItemModel.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (result != null) {
-      data['result'] = result!.map((v) => v.toJson()).toList();
-    }
+    data['result'] = result.map((v) => v.toJson()).toList();
     return data;
   }
 }

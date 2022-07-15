@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper_null_safety_flutter3/flutter_swiper_null_safety_flutter3.dart';
@@ -29,38 +28,39 @@ class _HomePageState extends State<HomePage> {
     // print(focusData.data is Map);
     var focusList = FocusModel.fromJson(result.data);
 
-    // print(focusList.result);
-    // focusList.result.forEach((value){
+    if (kDebugMode) {
+      print(focusList.result);
+    }
+    // for (var value in focusList.result) {
     //   print(value.title);
     //   print(value.pic);
-    // });
+    // }
 
-    // setState(() {
-    //   _focusData = focusList.result;
-    // });
+    setState(() {
+      _focusData = focusList.result;
+    });
   }
 
   //轮播图
   Widget _swiperWidget() {
-    List<Map> imgList = [
-      {"url": "https://www.itying.com/images/flutter/slide01.jpg"},
-      {"url": "https://www.itying.com/images/flutter/slide02.jpg"},
-      {"url": "https://www.itying.com/images/flutter/slide03.jpg"},
-    ];
-
-    return AspectRatio(
-      aspectRatio: 2 / 1,
-      child: Swiper(
-          itemBuilder: (BuildContext context, int index) {
-            return Image.network(
-              imgList[index]["url"],
-              fit: BoxFit.fill,
-            );
-          },
-          itemCount: imgList.length,
-          pagination: const SwiperPagination(),
-          autoplay: true),
-    );
+    if (_focusData.isNotEmpty) {
+      return AspectRatio(
+        aspectRatio: 2 / 1,
+        child: Swiper(
+            itemBuilder: (BuildContext context, int index) {
+              String pic = _focusData[index].pic;
+              return Image.network(
+                "https://jdmall.itying.com/${pic.replaceAll('\\', '/')}",
+                fit: BoxFit.fill,
+              );
+            },
+            itemCount: _focusData.length,
+            pagination: const SwiperPagination(),
+            autoplay: true),
+      );
+    } else {
+      return const Text('加载中...');
+    }
   }
 
   Widget _titleWidget(value) {
