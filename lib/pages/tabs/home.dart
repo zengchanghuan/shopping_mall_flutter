@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper_null_safety_flutter3/flutter_swiper_null_safety_flutter3.dart';
 import '../../serivces/screen_adapter.dart';
 import '../../model/focus_model.dart';
+import 'package:dio/dio.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,15 +15,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List _focusData = [];
+
   @override
   void initState() {
     super.initState();
+    _getFocusData();
+  }
 
-    var str='{"_id":"59f6ef443ce1fb0fb02c7a43","title":"笔记本电脑 ","status":"1"," url":"12" }';
-    var focus = FocusModel.fromJson(json.decode(str));
-    print(focus.sId);
-    print(focus.title);
+  _getFocusData() async {
+    var api = 'https://jdmall.itying.com/api/focus';
+    var result = await Dio().get(api);
+    // print(focusData.data is Map);
+    var focusList = FocusModel.fromJson(result.data);
 
+    // print(focusList.result);
+    // focusList.result.forEach((value){
+    //   print(value.title);
+    //   print(value.pic);
+    // });
+
+    // setState(() {
+    //   _focusData = focusList.result;
+    // });
   }
 
   //轮播图
