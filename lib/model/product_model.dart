@@ -1,4 +1,16 @@
 class ProductModel {
+  /*
+   {
+    "_id": "5a0425bc010e711234661439",
+    "title": "磨砂牛皮男休闲鞋-有属性",
+    "cid": "5a042480010e711234661436",
+    "price": 688,
+    "old_price": "968",
+    "pic": "public\\upload\\RinsvExKu7Ed-ocs_7W1DxYO.png",
+    "s_pic": "public\\upload\\RinsvExKu7Ed-ocs_7W1DxYO.png_200x200.png"
+  };
+  */
+
   List<ProductItemModel> result = [];
 
   ProductModel({required this.result});
