@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../config/config.dart';
 import '../../serivces/screen_adapter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../model/cate_model.dart';
+
 class CategoryPage extends StatefulWidget {
   const CategoryPage({Key? key}) : super(key: key);
 
@@ -11,18 +13,24 @@ class CategoryPage extends StatefulWidget {
   State<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClientMixin{
   int _selectIndex = 0;
   List _leftCateList = [];
   List _rightCateList = [];
 
   @override
-  void initState(){
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
+
+  @override
+  void initState() {
     super.initState();
     _getLeftCateData();
   }
+
   //左侧分类
-  _getLeftCateData() async{
+  _getLeftCateData() async {
     var api = '${Config.domain}api/pcate';
     var result = await Dio().get(api);
     var leftCateList = CateModel.fromJson(result.data);
@@ -32,9 +40,13 @@ class _CategoryPageState extends State<CategoryPage> {
     });
     _getRightCateData(leftCateList.result[0].sId);
   }
+
   //右侧分类
-  _getRightCateData(pid) async{
+  _getRightCateData(pid) async {
     var api = '${Config.domain}api/pcate?pid=$pid';
+    if (kDebugMode) {
+      print("右侧分类 $api");
+    }
     var result = await Dio().get(api);
     var rightCateList = CateModel.fromJson(result.data);
     // print(rightCateList.result);
@@ -43,52 +55,48 @@ class _CategoryPageState extends State<CategoryPage> {
     });
   }
 
-  Widget _leftCateWidget(leftWidth){
-
-    if(_leftCateList.isNotEmpty){
-
+  Widget _leftCateWidget(leftWidth) {
+    if (_leftCateList.isNotEmpty) {
       return SizedBox(
         width: leftWidth,
         height: double.infinity,
         // color: Colors.red,
         child: ListView.builder(
           itemCount: _leftCateList.length,
-          itemBuilder: (context,index){
+          itemBuilder: (context, index) {
             return Column(
               children: <Widget>[
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     setState(() {
-                      _selectIndex= index;
+                      _selectIndex = index;
                       _getRightCateData(_leftCateList[index].sId);
                     });
                   },
                   child: Container(
                     width: double.infinity,
                     height: ScreenAdapter.height(84),
-                    padding: EdgeInsets.only(top:ScreenAdapter.height(24)),
-                    color: _selectIndex==index? const Color.fromRGBO(240, 246, 246, 0.9):Colors.white,
-                    child: Text("${_leftCateList[index].title}",textAlign: TextAlign.center),
+                    padding: EdgeInsets.only(top: ScreenAdapter.height(24)),
+                    color: _selectIndex == index
+                        ? const Color.fromRGBO(240, 246, 246, 0.9)
+                        : Colors.white,
+                    child: Text("${_leftCateList[index].title}",
+                        textAlign: TextAlign.center),
                   ),
                 ),
                 const Divider(height: 1),
               ],
             );
           },
-
         ),
       );
-    }else{
-      return SizedBox(
-          width: leftWidth,
-          height: double.infinity
-      );
+    } else {
+      return SizedBox(width: leftWidth, height: double.infinity);
     }
   }
 
-  Widget _rightCateWidget(rightItemWidth,rightItemHeight){
-
-    if(_rightCateList.isNotEmpty){
+  Widget _rightCateWidget(rightItemWidth, rightItemHeight) {
+    if (_rightCateList.isNotEmpty) {
       return Expanded(
         flex: 1,
         child: Container(
@@ -96,26 +104,22 @@ class _CategoryPageState extends State<CategoryPage> {
             height: double.infinity,
             color: const Color.fromRGBO(240, 246, 246, 0.9),
             child: GridView.builder(
-
-              gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount:3,
-                  childAspectRatio: rightItemWidth/rightItemHeight,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: rightItemWidth / rightItemHeight,
                   crossAxisSpacing: 10,
-                  mainAxisSpacing: 10
-              ),
+                  mainAxisSpacing: 10),
               itemCount: _rightCateList.length,
-              itemBuilder: (context,index){
-
+              itemBuilder: (context, index) {
                 //处理图片
-                String pic=_rightCateList[index].pic;
-                pic=Config.domain+pic.replaceAll('\\', '/');
+                String pic = _rightCateList[index].pic;
+                pic = Config.domain + pic.replaceAll('\\', '/');
 
                 return Column(
                   children: <Widget>[
-
                     AspectRatio(
-                      aspectRatio: 1/1,
-                      child: Image.network(pic,fit: BoxFit.cover),
+                      aspectRatio: 1 / 1,
+                      child: Image.network(pic, fit: BoxFit.cover),
                     ),
                     SizedBox(
                       height: ScreenAdapter.height(28),
@@ -124,10 +128,9 @@ class _CategoryPageState extends State<CategoryPage> {
                   ],
                 );
               },
-            )
-        ),
+            )),
       );
-    }else{
+    } else {
       return Expanded(
           flex: 1,
           child: Container(
@@ -135,12 +138,9 @@ class _CategoryPageState extends State<CategoryPage> {
             height: double.infinity,
             color: const Color.fromRGBO(240, 246, 246, 0.9),
             child: const Text("加载中..."),
-          )
-      );
-
+          ));
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +163,8 @@ class _CategoryPageState extends State<CategoryPage> {
     return Row(
       children: <Widget>[
         _leftCateWidget(leftWidth),
-        _rightCateWidget(rightItemWidth,rightItemHeight)
+        _rightCateWidget(rightItemWidth, rightItemHeight)
       ],
     );
-
   }
 }
