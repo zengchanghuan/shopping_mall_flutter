@@ -115,17 +115,29 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
                 String pic = _rightCateList[index].pic;
                 pic = Config.domain + pic.replaceAll('\\', '/');
 
-                return Column(
-                  children: <Widget>[
-                    AspectRatio(
-                      aspectRatio: 1 / 1,
-                      child: Image.network(pic, fit: BoxFit.cover),
+                return InkWell(
+                  onTap: (){
+
+                    Navigator.pushNamed(context, '/productList',arguments: {
+                      "cid":_rightCateList[index].sId
+                    });
+
+                  },
+                  child: Container(
+                    // padding: EdgeInsets.all(10),
+                    child: Column(
+                      children: <Widget>[
+                        AspectRatio(
+                          aspectRatio: 1 / 1,
+                          child: Image.network(pic, fit: BoxFit.cover),
+                        ),
+                        SizedBox(
+                          height: ScreenAdapter.height(28),
+                          child: Text("${_rightCateList[index].title}"),
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      height: ScreenAdapter.height(28),
-                      child: Text("${_rightCateList[index].title}"),
-                    )
-                  ],
+                  ),
                 );
               },
             )),
@@ -144,6 +156,7 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     ScreenUtil.init(context, designSize: const Size(750, 1334));
 
     //计算右侧GridView宽高比

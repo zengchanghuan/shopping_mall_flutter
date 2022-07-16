@@ -228,6 +228,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     ScreenUtil.init(context, designSize: const Size(750, 1334));
     return ListView(
       children: [

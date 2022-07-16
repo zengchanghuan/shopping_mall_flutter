@@ -16,6 +16,8 @@ class _CartPageState extends State<CartPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     ScreenUtil.init(context, designSize: const Size(750, 1334));
 
     return const Text("我是购物车");
