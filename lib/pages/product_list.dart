@@ -294,11 +294,15 @@ class _ProductListState extends State<ProductList> {
         endDrawer: const Drawer(
           child: Text("实现筛选功能"),
         ),
-        body: Stack(
-          children: <Widget>[
-            _productListWidget(),
-            _subHeaderWidget(),
-          ],
-        ));
+        body: _hasMore
+            ? Stack(
+                children: <Widget>[
+                  _productListWidget(),
+                  _subHeaderWidget(),
+                ],
+              )
+            : const Center(
+                child: Text("没有您要浏览的数据"),
+              ));
   }
 }
