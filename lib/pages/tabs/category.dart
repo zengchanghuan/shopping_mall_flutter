@@ -5,7 +5,7 @@ import '../../config/config.dart';
 import '../../serivces/screen_adapter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../model/cate_model.dart';
-
+import '../../widget/loading_widget.dart';
 class CategoryPage extends StatefulWidget {
   const CategoryPage({Key? key}) : super(key: key);
 
@@ -123,20 +123,17 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
                     });
 
                   },
-                  child: Container(
-                    // padding: EdgeInsets.all(10),
-                    child: Column(
-                      children: <Widget>[
-                        AspectRatio(
-                          aspectRatio: 1 / 1,
-                          child: Image.network(pic, fit: BoxFit.cover),
-                        ),
-                        SizedBox(
-                          height: ScreenAdapter.height(28),
-                          child: Text("${_rightCateList[index].title}"),
-                        )
-                      ],
-                    ),
+                  child: Column(
+                    children: <Widget>[
+                      AspectRatio(
+                        aspectRatio: 1 / 1,
+                        child: Image.network(pic, fit: BoxFit.cover),
+                      ),
+                      SizedBox(
+                        height: ScreenAdapter.height(28),
+                        child: Text("${_rightCateList[index].title}"),
+                      )
+                    ],
                   ),
                 );
               },
