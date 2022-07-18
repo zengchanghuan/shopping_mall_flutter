@@ -348,6 +348,10 @@ class _ProductListState extends State<ProductList> {
             },
           ),
           title: Container(
+            height: ScreenAdapter.height(68),
+            decoration: BoxDecoration(
+                color: const Color.fromRGBO(233, 233, 233, 0.8),
+                borderRadius: BorderRadius.circular(30)),
             child: TextField(
               controller: _initKeywordsController,
               autofocus: false,
@@ -361,10 +365,6 @@ class _ProductListState extends State<ProductList> {
                 });
               },
             ),
-            height: ScreenAdapter.height(68),
-            decoration: BoxDecoration(
-                color: const Color.fromRGBO(233, 233, 233, 0.8),
-                borderRadius: BorderRadius.circular(30)),
           ),
           actions: <Widget>[
             InkWell(
