@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../serivces/screen_adapter.dart';
+import '../serivces/search_services.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -10,6 +12,110 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   var _keywords = "";
+
+  List _historyListData = [];
+
+  void initState() {
+    super.initState();
+    _getHistoryData();
+  }
+
+  _getHistoryData() async {
+    var tempList = await SearchServices.getHistoryList();
+    setState(() {
+      _historyListData = tempList;
+    });
+  }
+
+  _showAlertDialog(keywords) async {
+    var result = await showDialog(
+        barrierDismissible: false, //表示点击灰色背景的时候是否消失弹出框
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("提示信息!"),
+            content: const Text("您确定要删除吗?"),
+            actions: <Widget>[
+              TextButton(
+                child: const Text("取消"),
+                onPressed: () {
+                  if (kDebugMode) {
+                    print("取消");
+                  }
+                  Navigator.pop(context, 'Cancle');
+                },
+              ),
+              TextButton(
+                child: const Text("确定"),
+                onPressed: () async {
+                  //注意异步
+                  await SearchServices.removeHistoryData(keywords);
+                  _getHistoryData();
+                  Navigator.pop(context, "Ok");
+                },
+              )
+            ],
+          );
+        });
+
+     if (kDebugMode) {
+       print(result);
+     }
+  }
+
+  Widget _historyListWidget() {
+    if (_historyListData.isNotEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("历史记录", style: Theme.of(context).textTheme.subtitle1),
+          const Divider(),
+          Column(
+            children: _historyListData.map((value) {
+              return Column(
+                children: <Widget>[
+                  ListTile(
+                    title: Text("$value"),
+                    onLongPress: () {
+                      _showAlertDialog("$value");
+                    },
+                  ),
+                  const Divider()
+                ],
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 100),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              InkWell(
+                onTap: () {
+                  SearchServices.clearHistoryList();
+                  _getHistoryData();
+                },
+                child: Container(
+                  width: ScreenAdapter.width(400),
+                  height: ScreenAdapter.height(64),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black45, width: 1)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const <Widget>[
+                      Icon(Icons.delete),
+                      Text("清空历史记录")
+                    ],
+                  ),
+                ),
+              )
+            ],
+          )
+        ],
+      );
+    } else {
+      return const Text("");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +147,7 @@ class _SearchState extends State<Search> {
                 ),
               ),
               onTap: () {
+                SearchServices.setHistoryData(_keywords);
                 Navigator.pushReplacementNamed(context, '/productList',
                     arguments: {"keywords": _keywords});
               },
@@ -114,53 +221,10 @@ class _SearchState extends State<Search> {
                 ],
               ),
               const SizedBox(height: 10),
-              Text("历史记录", style: Theme.of(context).textTheme.subtitle1),
-              const Divider(),
-              Column(
-                children: const <Widget>[
-                  ListTile(
-                    title: Text("女装"),
-                  ),
-                  Divider(),
-                  ListTile(
-                    title: Text("女装"),
-                  ),
-                  Divider(),
-                  ListTile(
-                    title: Text("男装"),
-                  ),
-                  Divider(),
-                  ListTile(
-                    title: Text("手机"),
-                  ),
-                  Divider(),
-                  ListTile(
-                    title: Text("鞋子"),
-                  ),
-                  Divider(),
-                ],
-              ),
-              const SizedBox(height: 100),
-              InkWell(
-                onTap: () {},
-                child: Container(
-                  width: ScreenAdapter.width(400),
-                  height: ScreenAdapter.height(64),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black45, width: 1)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[
-                      Icon(Icons.delete),
-                      Text("清空历史记录")
-                    ],
-                  ),
-                ),
-              )
+              //历史记录
+              _historyListWidget()
             ],
           ),
         ));
   }
 }
-
-
