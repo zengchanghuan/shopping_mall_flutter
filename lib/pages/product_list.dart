@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../serivces/screen_adapter.dart';
 import '../config/config.dart';
@@ -7,9 +6,9 @@ import '../model/product_model.dart';
 import '../widget/loading_widget.dart';
 
 class ProductList extends StatefulWidget {
-  final Map arguments = {};
+  final Map arguments;
 
-  ProductList({Key? key, required arguments}) : super(key: key);
+  const ProductList({Key? key, required this.arguments}) : super(key: key);
 
   @override
   State<ProductList> createState() => _ProductListState();
@@ -110,9 +109,7 @@ class _ProductListState extends State<ProductList> {
       api =
           '${Config.domain}api/plist?search=$_keywords&page=$_page&sort=$_sort&pageSize=$_pageSize';
     }
-    if (kDebugMode) {
-      print(api);
-    }
+    print(api);
 
     var result = await Dio().get(api);
 
@@ -264,7 +261,7 @@ class _ProductListState extends State<ProductList> {
         _productList = [];
         //改变sort排序
         _subHeaderList[id - 1]['sort'] = _subHeaderList[id - 1]['sort'] * -1;
-        //回到顶部  需要判断是否有数据  有数据回到顶部
+        //回到顶部
         if (_hasData) {
           _scrollController.jumpTo(0);
         }
