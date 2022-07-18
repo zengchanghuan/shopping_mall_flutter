@@ -1,16 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../serivces/screen_adapter.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../config/config.dart';
 import 'package:dio/dio.dart';
 import '../model/product_model.dart';
 import '../widget/loading_widget.dart';
 
 class ProductList extends StatefulWidget {
-  final Map arguments;
+  final Map arguments = {};
 
-  const ProductList({Key? key, required this.arguments}) : super(key: key);
+  ProductList({Key? key, required arguments}) : super(key: key);
 
   @override
   State<ProductList> createState() => _ProductListState();
@@ -42,6 +41,9 @@ class _ProductListState extends State<ProductList> {
   //是否有数据
   bool _hasMore = true;
 
+  //分类或者搜索关键词下面是否有数据
+  bool _hasData = true;
+
   /*二级导航数据*/
   final List _subHeaderList = [
     {
@@ -59,11 +61,26 @@ class _ProductListState extends State<ProductList> {
   //二级导航选中判断
   int _selectHeaderId = 1;
 
+  //配置search搜索框的值
+  final _initKeywordsController = TextEditingController();
+
+  //分类id   如果指定类型的话注意可空  String? _cid;
+  String? _cid;
+
+  //搜索关键词  如果指定类型的话注意可空  String? _keywords;
+  String? _keywords;
+
   @override
   void initState() {
     super.initState();
-    _getProductListData();
 
+    _cid = widget.arguments["cid"];
+    _keywords = widget.arguments["keywords"];
+    //给search框框赋值
+    if (_keywords != null) {
+      _initKeywordsController.text = _keywords!; //类型断言
+    }
+    _getProductListData();
     //监听滚动条滚动事件
     _scrollController.addListener(() {
       //_scrollController.position.pixels //获取滚动条滚动的高度
@@ -83,123 +100,45 @@ class _ProductListState extends State<ProductList> {
       flag = false;
     });
 
-    var api =
-        '${Config.domain}api/plist?cid=${widget.arguments["cid"]}&page=$_page&sort=$_sort&pageSize=$_pageSize';
+    String api;
 
+    if (_keywords == null) {
+      api =
+          '${Config.domain}api/plist?cid=$_cid&page=$_page&sort=$_sort&pageSize=$_pageSize';
+    } else {
+      api =
+          '${Config.domain}api/plist?search=$_keywords&page=$_page&sort=$_sort&pageSize=$_pageSize';
+    }
     if (kDebugMode) {
       print(api);
     }
+
     var result = await Dio().get(api);
 
     var productList = ProductModel.fromJson(result.data);
 
-    if (kDebugMode) {
-      print(productList.result.length);
+    //判断是否有搜索数据
+    if (productList.result.isEmpty && _page == 1) {
+      setState(() {
+        _hasData = false;
+      });
+    } else {
+      _hasData = true;
     }
-
+    //判断最后一页有没有数据
     if (productList.result.length < _pageSize) {
       setState(() {
-        // _productList = productList.result;
         _productList.addAll(productList.result);
         _hasMore = false;
         flag = true;
       });
     } else {
       setState(() {
-        // _productList = productList.result;
         _productList.addAll(productList.result);
         _page++;
         flag = true;
       });
     }
-  }
-
-  //显示header Icon
-  Widget _showIcon(id) {
-    if (id == 2 || id == 3) {
-      if (_subHeaderList[id - 1]["sort"] == 1) {
-        return const Icon(Icons.arrow_drop_down);
-      }
-      return const Icon(Icons.arrow_drop_up);
-    }
-    return const Text("");
-  }
-
-  //导航改变的时候触发
-  _subHeaderChange(id) {
-    if (id == 4) {
-      _scaffoldKey.currentState!.openEndDrawer();
-      setState(() {
-        _selectHeaderId = id;
-      });
-    } else {
-      setState(() {
-        _selectHeaderId = id;
-        _sort =
-            "${_subHeaderList[id - 1]["fileds"]}_${_subHeaderList[id - 1]["sort"]}";
-
-        //重置分页
-        _page = 1;
-        //重置数据
-        _productList = [];
-        //改变sort排序
-        _subHeaderList[id - 1]['sort'] = _subHeaderList[id - 1]['sort'] * -1;
-        //回到顶部
-        _scrollController.jumpTo(0);
-        //重置_hasMore
-        _hasMore = true;
-        //重新请求
-        _getProductListData();
-      });
-    }
-  }
-
-  //筛选导航
-  Widget _subHeaderWidget() {
-    return Positioned(
-      top: 0,
-      height: ScreenAdapter.height(80),
-      width: ScreenAdapter.width(750),
-      child: Container(
-        width: ScreenAdapter.width(750),
-        height: ScreenAdapter.height(80),
-        // color: Colors.red,
-        decoration: const BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-                    width: 1, color: Color.fromRGBO(233, 233, 233, 0.9)))),
-        child: Row(
-          children: _subHeaderList.map((value) {
-            return Expanded(
-              flex: 1,
-              child: InkWell(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ScreenAdapter.height(16), 0, ScreenAdapter.height(16)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "${value["title"]}",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: (_selectHeaderId == value["id"])
-                                ? Colors.red
-                                : Colors.black54),
-                      ),
-                      _showIcon(value["id"])
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  _subHeaderChange(value["id"]);
-                },
-              ),
-            );
-          }).toList(),
-        ),
-      ),
-    );
   }
 
   //显示加载中的圈圈
@@ -212,6 +151,7 @@ class _ProductListState extends State<ProductList> {
       return (index == _productList.length - 1)
           ? const Text("--我是有底线的--")
           : const Text("");
+
     }
   }
 
@@ -305,34 +245,152 @@ class _ProductListState extends State<ProductList> {
     }
   }
 
+  //导航改变的时候触发
+  _subHeaderChange(id) {
+    if (id == 4) {
+      _scaffoldKey.currentState!.openEndDrawer();
+      setState(() {
+        _selectHeaderId = id;
+      });
+    } else {
+      setState(() {
+        _selectHeaderId = id;
+        _sort =
+            "${_subHeaderList[id - 1]["fileds"]}_${_subHeaderList[id - 1]["sort"]}";
+
+        //重置分页
+        _page = 1;
+        //重置数据
+        _productList = [];
+        //改变sort排序
+        _subHeaderList[id - 1]['sort'] = _subHeaderList[id - 1]['sort'] * -1;
+        //回到顶部  需要判断是否有数据  有数据回到顶部
+        if (_hasData) {
+          _scrollController.jumpTo(0);
+        }
+        //重置_hasMore
+        _hasMore = true;
+        //重新请求
+        _getProductListData();
+      });
+    }
+  }
+
+  //显示header Icon
+  Widget _showIcon(id) {
+    if (id == 2 || id == 3) {
+      if (_subHeaderList[id - 1]["sort"] == 1) {
+        return const Icon(Icons.arrow_drop_down);
+      }
+      return const Icon(Icons.arrow_drop_up);
+    }
+    return const Text("");
+  }
+
+  //筛选导航
+  Widget _subHeaderWidget() {
+    return Positioned(
+      top: 0,
+      height: ScreenAdapter.height(80),
+      width: ScreenAdapter.width(750),
+      child: Container(
+        width: ScreenAdapter.width(750),
+        height: ScreenAdapter.height(80),
+        // color: Colors.red,
+        decoration: const BoxDecoration(
+            border: Border(
+                bottom: BorderSide(
+                    width: 1, color: Color.fromRGBO(233, 233, 233, 0.9)))),
+        child: Row(
+          children: _subHeaderList.map((value) {
+            return Expanded(
+              flex: 1,
+              child: InkWell(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      0, ScreenAdapter.height(16), 0, ScreenAdapter.height(16)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "${value["title"]}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: (_selectHeaderId == value["id"])
+                                ? Colors.red
+                                : Colors.black54),
+                      ),
+                      _showIcon(value["id"])
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  _subHeaderChange(value["id"]);
+                },
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, designSize: const Size(750, 1334));
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: const Text("商品列表"),
           leading: IconButton(
-            //注意：新版本的Flutter中加入Drawer组件会导致默认的返回按钮失效，所以需要手动加上返回按钮
+            //注意：新版本Flutter中加入Drawer后会替换默认的返回
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          actions: const <Widget>[Text("")],
+          title: Container(
+            height: ScreenAdapter.height(68),
+            decoration: BoxDecoration(
+                color:const Color.fromRGBO(233, 233, 233, 0.8),
+                borderRadius: BorderRadius.circular(30)),
+            child: TextField(
+              controller: _initKeywordsController,
+              autofocus: false,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide.none)),
+              onChanged: (value) {
+                setState(() {
+                  _keywords = value;
+                });
+              },
+            ),
+          ),
+          actions: <Widget>[
+            InkWell(
+              child: SizedBox(
+                height: ScreenAdapter.height(68),
+                width: ScreenAdapter.width(80),
+                child: Row(
+                  children: const <Widget>[Text("搜索")],
+                ),
+              ),
+              onTap: () {
+                _subHeaderChange(1);
+              },
+            )
+          ],
         ),
         endDrawer: const Drawer(
           child: Text("实现筛选功能"),
         ),
-        body: _hasMore
+        body: _hasData
             ? Stack(
                 children: <Widget>[
                   _productListWidget(),
                   _subHeaderWidget(),
                 ],
               )
-            : const Center(
-                child: Text("没有您要浏览的数据"),
-              ));
+            : const Center(child: Text("没有您要浏览的数据")));
   }
 }

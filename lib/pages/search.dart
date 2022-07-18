@@ -9,6 +9,8 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  var _keywords = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +22,9 @@ class _SearchState extends State<Search> {
                 borderRadius: BorderRadius.circular(30)),
             child: TextField(
               autofocus: true,
+              onChanged: (value){
+                _keywords = value;
+              },
               decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -35,7 +40,10 @@ class _SearchState extends State<Search> {
                   children: const <Widget>[Text("搜索")],
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/productList',
+                    arguments: {"keywords": _keywords});
+              },
             )
           ],
         ),
