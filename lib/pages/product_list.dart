@@ -49,7 +49,7 @@ class _ProductListState extends State<ProductList> {
       "title": "综合",
       "fileds": "all",
       "sort":
-      -1, //排序     升序：price_1     {price:1}        降序：price_-1   {price:-1}
+          -1, //排序     升序：price_1     {price:1}        降序：price_-1   {price:-1}
     },
     {"id": 2, "title": "销量", "fileds": 'salecount', "sort": -1},
     {"id": 3, "title": "价格", "fileds": 'price', "sort": -1},
@@ -115,9 +115,9 @@ class _ProductListState extends State<ProductList> {
   }
 
   //显示header Icon
-  Widget _showIcon(id){
-    if(id==2|| id ==3){
-      if(_subHeaderList[id-1]["sort"]==1){
+  Widget _showIcon(id) {
+    if (id == 2 || id == 3) {
+      if (_subHeaderList[id - 1]["sort"] == 1) {
         return const Icon(Icons.arrow_drop_down);
       }
       return const Icon(Icons.arrow_drop_up);
@@ -136,15 +136,14 @@ class _ProductListState extends State<ProductList> {
       setState(() {
         _selectHeaderId = id;
         _sort =
-        "${_subHeaderList[id - 1]["fileds"]}_${_subHeaderList[id - 1]["sort"]}";
+            "${_subHeaderList[id - 1]["fileds"]}_${_subHeaderList[id - 1]["sort"]}";
 
         //重置分页
         _page = 1;
         //重置数据
         _productList = [];
         //改变sort排序
-        _subHeaderList[id - 1]['sort'] =
-            _subHeaderList[id - 1]['sort'] * -1;
+        _subHeaderList[id - 1]['sort'] = _subHeaderList[id - 1]['sort'] * -1;
         //回到顶部
         _scrollController.jumpTo(0);
         //重置_hasMore
@@ -155,7 +154,6 @@ class _ProductListState extends State<ProductList> {
     }
   }
 
-  //筛选导航
   //筛选导航
   Widget _subHeaderWidget() {
     return Positioned(
