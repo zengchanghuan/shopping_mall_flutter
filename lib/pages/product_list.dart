@@ -16,10 +16,11 @@ class ProductList extends StatefulWidget {
 }
 
 class _ProductListState extends State<ProductList> {
+  //Scaffold key
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  //用于上拉分页
-  final ScrollController _scrollController = ScrollController(); //listview 的控制器
+  //用于上拉分页 listview 的控制器
+  final ScrollController _scrollController = ScrollController();
 
   //分页
   int _page = 1;
@@ -38,7 +39,7 @@ class _ProductListState extends State<ProductList> {
   //解决重复请求的问题
   bool flag = true;
 
-  //是否有数据
+  //是否有更多分页数据
   bool _hasMore = true;
 
   //分类或者搜索关键词下面是否有数据
@@ -151,7 +152,6 @@ class _ProductListState extends State<ProductList> {
       return (index == _productList.length - 1)
           ? const Text("--我是有底线的--")
           : const Text("");
-
     }
   }
 
@@ -348,10 +348,6 @@ class _ProductListState extends State<ProductList> {
             },
           ),
           title: Container(
-            height: ScreenAdapter.height(68),
-            decoration: BoxDecoration(
-                color:const Color.fromRGBO(233, 233, 233, 0.8),
-                borderRadius: BorderRadius.circular(30)),
             child: TextField(
               controller: _initKeywordsController,
               autofocus: false,
@@ -365,6 +361,10 @@ class _ProductListState extends State<ProductList> {
                 });
               },
             ),
+            height: ScreenAdapter.height(68),
+            decoration: BoxDecoration(
+                color: const Color.fromRGBO(233, 233, 233, 0.8),
+                borderRadius: BorderRadius.circular(30)),
           ),
           actions: <Widget>[
             InkWell(
