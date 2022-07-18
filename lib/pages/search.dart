@@ -11,10 +11,11 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  var _keywords = "";
+  dynamic _keywords;
 
   List _historyListData = [];
 
+  @override
   void initState() {
     super.initState();
     _getHistoryData();
@@ -42,7 +43,7 @@ class _SearchState extends State<Search> {
                   if (kDebugMode) {
                     print("取消");
                   }
-                  Navigator.pop(context, 'Cancle');
+                  Navigator.pop(context, 'Cancel');
                 },
               ),
               TextButton(
@@ -51,16 +52,17 @@ class _SearchState extends State<Search> {
                   //注意异步
                   await SearchServices.removeHistoryData(keywords);
                   _getHistoryData();
-                  Navigator.pop(context, "Ok");
+                  if (!mounted) return;
+                  Navigator.pop(context, "ok");
                 },
               )
             ],
           );
         });
 
-     if (kDebugMode) {
-       print(result);
-     }
+    if (kDebugMode) {
+      print(result);
+    }
   }
 
   Widget _historyListWidget() {
