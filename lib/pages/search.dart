@@ -149,6 +149,7 @@ class _SearchState extends State<Search> {
                 ),
               ),
               onTap: () {
+                //搜索数据存入缓存
                 SearchServices.setHistoryData(_keywords);
                 Navigator.pushReplacementNamed(context, '/productList',
                     arguments: {"keywords": _keywords});
