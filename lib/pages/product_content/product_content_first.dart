@@ -15,10 +15,16 @@ class ProductContentFirst extends StatefulWidget {
   State<ProductContentFirst> createState() => _ProductContentFirstState();
 }
 
-class _ProductContentFirstState extends State<ProductContentFirst> {
+class _ProductContentFirstState extends State<ProductContentFirst>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   late ProductContentitem _productContent;
 
   List _attr = [];
+
+  String _selectedValue = "";
 
   @override
   void initState() {
@@ -28,19 +34,83 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
 
     _attr = _productContent.attr;
 
+    _initAttr();
     if (kDebugMode) {
       print(_attr);
     }
   }
 
-  List<Widget> _getAttrItemWidget(attrItem) {
+  //初始化Attr 格式化数据
+  _initAttr() {
+    //注意attrList属性需要在model中定义
+    var attr = _attr;
+    for (var i = 0; i < attr.length; i++) {
+      for (var j = 0; j < attr[i].list.length; j++) {
+        if (j == 0) {
+          attr[i].attrList.add({"title": attr[i].list[j], "checked": true});
+        } else {
+          attr[i].attrList.add({"title": attr[i].list[j], "checked": false});
+        }
+      }
+    }
+    // print(attr[0].attrList);
+    // print(attr[0].cate);
+    // print(attr[0].list);
+    _getSelectedAttrValue();
+  }
+
+  //改变属性值
+  _changeAttr(cate, title, setBottomState) {
+    var attr = _attr;
+    for (var i = 0; i < attr.length; i++) {
+      if (attr[i].cate == cate) {
+        for (var j = 0; j < attr[i].attrList.length; j++) {
+          attr[i].attrList[j]["checked"] = false;
+          if (title == attr[i].attrList[j]["title"]) {
+            attr[i].attrList[j]["checked"] = true;
+          }
+        }
+      }
+    }
+    setBottomState(() {
+      //注意  改变showModalBottomSheet里面的数据 来源于StatefulBuilder
+      _attr = attr;
+    });
+    _getSelectedAttrValue();
+  }
+
+  //获取选中的值
+  _getSelectedAttrValue() {
+    var list = _attr;
+    List tempArr = [];
+    for (var i = 0; i < list.length; i++) {
+      for (var j = 0; j < list[i].attrList.length; j++) {
+        if (list[i].attrList[j]['checked'] == true) {
+          tempArr.add(list[i].attrList[j]["title"]);
+        }
+      }
+    }
+    // print(tempArr.join(','));
+    setState(() {
+      _selectedValue = tempArr.join(',');
+    });
+  }
+
+  //循环具体属性
+  List<Widget> _getAttrItemWidget(attrItem, setBottomState) {
     List<Widget> attrItemList = [];
-    attrItem.list.forEach((item) {
+    attrItem.attrList.forEach((item) {
       attrItemList.add(Container(
         margin: const EdgeInsets.all(10),
-        child: Chip(
-          label: Text("$item"),
-          padding: const EdgeInsets.all(10),
+        child: InkWell(
+          onTap: () {
+            _changeAttr(attrItem.cate, item["title"], setBottomState);
+          },
+          child: Chip(
+            label: Text("${item["title"]}"),
+            padding: const EdgeInsets.all(10),
+            backgroundColor: item["checked"] ? Colors.red : Colors.black26,
+          ),
         ),
       ));
     });
@@ -48,7 +118,7 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
   }
 
   //封装一个组件 渲染attr
-  List<Widget> _getAttrWidget() {
+  List<Widget> _getAttrWidget(setBottomState) {
     List<Widget> attrList = [];
     for (var attrItem in _attr) {
       attrList.add(Wrap(
@@ -56,15 +126,15 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
           SizedBox(
             width: ScreenAdapter.width(120),
             child: Padding(
-              padding: EdgeInsets.only(top: ScreenAdapter.height(28)),
+              padding: EdgeInsets.only(top: ScreenAdapter.height(22)),
               child: Text("${attrItem.cate}: ",
                   style: const TextStyle(fontWeight: FontWeight.bold)),
             ),
           ),
           SizedBox(
-            width: ScreenAdapter.width(580),
+            width: ScreenAdapter.width(590),
             child: Wrap(
-              children: _getAttrItemWidget(attrItem),
+              children: _getAttrItemWidget(attrItem, setBottomState),
             ),
           )
         ],
@@ -79,63 +149,68 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return Stack(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(ScreenAdapter.width(20)),
-                child: ListView(
-                  children: <Widget>[
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: _getAttrWidget())
-                  ],
-                ),
-              ),
-              Positioned(
-                bottom: 16,
-                width: ScreenAdapter.width(750),
-                height: ScreenAdapter.height(76),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: JdButton(
-                          color: const Color.fromRGBO(253, 1, 0, 0.9),
-                          text: "加入购物车",
-                          cb: () {
-                            if (kDebugMode) {
-                              print('加入购物车');
-                            }
-                          },
-                        ),
-                      ),
+          return StatefulBuilder(
+            builder: (BuildContext context, setBottomState) {
+              return Stack(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(ScreenAdapter.width(20)),
+                    child: ListView(
+                      children: <Widget>[
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: _getAttrWidget(setBottomState))
+                      ],
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: JdButton(
-                            color: const Color.fromRGBO(255, 165, 0, 0.9),
-                            text: "立即购买",
-                            cb: () {
-                              if (kDebugMode) {
-                                print('立即购买');
-                              }
-                            },
-                          )),
-                    )
-                  ],
-                ),
-              )
-            ],
+                  ),
+                  Positioned(
+                    bottom: 16,
+                    width: ScreenAdapter.width(750),
+                    height: ScreenAdapter.height(76),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: JdButton(
+                              color:const Color.fromRGBO(253, 1, 0, 0.9),
+                              text: "加入购物车",
+                              cb: () {
+                                if (kDebugMode) {
+                                  print('加入购物车');
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                              margin:const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              child: JdButton(
+                                color:const Color.fromRGBO(255, 165, 0, 0.9),
+                                text: "立即购买",
+                                cb: () {
+                                  if (kDebugMode) {
+                                    print('立即购买');
+                                  }
+                                },
+                              )),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              );
+            },
           );
         });
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     //处理图片
     String pic = Config.domain + _productContent.pic;
     pic = pic.replaceAll('\\', '/');
@@ -196,21 +271,24 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
             ),
           ),
           //筛选
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            height: ScreenAdapter.height(80),
-            child: InkWell(
-              onTap: () {
-                _attrBottomSheet();
-              },
-              child: Row(
-                children: const <Widget>[
-                  Text("已选: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text("115，黑色，XL，1件")
-                ],
-              ),
-            ),
-          ),
+          _attr.isNotEmpty
+              ? Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  height: ScreenAdapter.height(80),
+                  child: InkWell(
+                    onTap: () {
+                      _attrBottomSheet();
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        const Text("已选: ",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text(_selectedValue)
+                      ],
+                    ),
+                  ),
+                )
+              : const Text(""),
           const Divider(),
           SizedBox(
             height: ScreenAdapter.height(80),
