@@ -17,16 +17,22 @@ class ProductContentFirst extends StatefulWidget {
 
 class _ProductContentFirstState extends State<ProductContentFirst> {
   late ProductContentitem _productContent;
-  final List _attr = [];
+
+  List _attr = [];
 
   @override
   void initState() {
     super.initState();
 
     _productContent = widget._productContentList[0];
+
+    _attr = _productContent.attr;
+
     if (kDebugMode) {
       print(_attr);
     }
+
+
   }
 
   List<Widget> _getAttrItemWidget(attrItem) {
@@ -74,7 +80,7 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
   _attrBottomSheet() {
     showModalBottomSheet(
         context: context,
-        builder: (context) {
+        builder: (contex) {
           return Stack(
             children: <Widget>[
               Container(
@@ -96,9 +102,9 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
                     Expanded(
                       flex: 1,
                       child: Container(
-                        margin:const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                         child: JdButton(
-                          color:const Color.fromRGBO(253, 1, 0, 0.9),
+                          color: const Color.fromRGBO(253, 1, 0, 0.9),
                           text: "加入购物车",
                           cb: () {
                             if (kDebugMode) {
@@ -111,9 +117,9 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
                     Expanded(
                       flex: 1,
                       child: Container(
-                          margin:const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: JdButton(
-                            color:const Color.fromRGBO(255, 165, 0, 0.9),
+                            color: const Color.fromRGBO(255, 165, 0, 0.9),
                             text: "立即购买",
                             cb: () {
                               if (kDebugMode) {
