@@ -127,23 +127,29 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             String sPic = _hotProductList[index].sPic;
             sPic = Config.domain + sPic.replaceAll('\\', '/');
 
-            return Column(
-              children: <Widget>[
-                Container(
-                  height: ScreenAdapter.height(140),
-                  width: ScreenAdapter.width(140),
-                  margin: EdgeInsets.only(right: ScreenAdapter.width(21)),
-                  child: Image.network(sPic, fit: BoxFit.cover),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: ScreenAdapter.height(10)),
-                  height: ScreenAdapter.height(44),
-                  child: Text(
-                    "¥${_hotProductList[index].price}",
-                    style: const TextStyle(color: Colors.red),
+            return InkWell(
+              onTap: (){
+                Navigator.pushNamed(context, '/productContent',
+                    arguments: {"id": _hotProductList[index].sId});
+              },
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: ScreenAdapter.height(140),
+                    width: ScreenAdapter.width(140),
+                    margin: EdgeInsets.only(right: ScreenAdapter.width(21)),
+                    child: Image.network(sPic, fit: BoxFit.cover),
                   ),
-                )
-              ],
+                  Container(
+                    padding: EdgeInsets.only(top: ScreenAdapter.height(10)),
+                    height: ScreenAdapter.height(44),
+                    child: Text(
+                      "¥${_hotProductList[index].price}",
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  )
+                ],
+              ),
             );
           },
           itemCount: _hotProductList.length,
@@ -167,58 +173,64 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
           String sPic = value.sPic;
           sPic = Config.domain + sPic.replaceAll('\\', '/');
 
-          return Container(
-            padding: const EdgeInsets.all(10),
-            width: itemWidth,
-            decoration: BoxDecoration(
-                border: Border.all(
-                    color: const Color.fromRGBO(233, 233, 233, 0.9), width: 1)),
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  width: double.infinity,
-                  child: AspectRatio(
-                    //防止服务器返回的图片大小不一致导致高度不一致问题
-                    aspectRatio: 1 / 1,
-                    child: Image.network(
-                      sPic,
-                      fit: BoxFit.cover,
+          return InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, '/productContent',
+                  arguments: {"id": value.sId});
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              width: itemWidth,
+              decoration: BoxDecoration(
+                  border: Border.all(
+                      color: const Color.fromRGBO(233, 233, 233, 0.9), width: 1)),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    width: double.infinity,
+                    child: AspectRatio(
+                      //防止服务器返回的图片大小不一致导致高度不一致问题
+                      aspectRatio: 1 / 1,
+                      child: Image.network(
+                        sPic,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: ScreenAdapter.height(20)),
-                  child: Text(
-                    "${value.title}",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: Colors.black54),
+                  Padding(
+                    padding: EdgeInsets.only(top: ScreenAdapter.height(20)),
+                    child: Text(
+                      "${value.title}",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(color: Colors.black54),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: ScreenAdapter.height(20)),
-                  child: Stack(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "¥${value.price}",
-                          style:
-                              const TextStyle(color: Colors.red, fontSize: 16),
+                  Padding(
+                    padding: EdgeInsets.only(top: ScreenAdapter.height(20)),
+                    child: Stack(
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "¥${value.price}",
+                            style:
+                                const TextStyle(color: Colors.red, fontSize: 16),
+                          ),
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text("¥${value.oldPrice}",
-                            style: const TextStyle(
-                                color: Colors.black54,
-                                fontSize: 14,
-                                decoration: TextDecoration.lineThrough)),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Text("¥${value.oldPrice}",
+                              style: const TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 14,
+                                  decoration: TextDecoration.lineThrough)),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         }).toList(),
