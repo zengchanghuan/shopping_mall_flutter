@@ -15,7 +15,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   List _focusData = [];
   List _hotProductList = [];
   List _bestProductList = [];
@@ -128,7 +129,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             sPic = Config.domain + sPic.replaceAll('\\', '/');
 
             return InkWell(
-              onTap: (){
+              onTap: () {
                 Navigator.pushNamed(context, '/productContent',
                     arguments: {"id": _hotProductList[index].sId});
               },
@@ -183,7 +184,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
               width: itemWidth,
               decoration: BoxDecoration(
                   border: Border.all(
-                      color: const Color.fromRGBO(233, 233, 233, 0.9), width: 1)),
+                      color: const Color.fromRGBO(233, 233, 233, 0.9),
+                      width: 1)),
               child: Column(
                 children: <Widget>[
                   SizedBox(
@@ -214,8 +216,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                           alignment: Alignment.centerLeft,
                           child: Text(
                             "¥${value.price}",
-                            style:
-                                const TextStyle(color: Colors.red, fontSize: 16),
+                            style: const TextStyle(
+                                color: Colors.red, fontSize: 16),
                           ),
                         ),
                         Align(
@@ -243,18 +245,49 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     super.build(context);
 
     ScreenUtil.init(context, designSize: const Size(750, 1334));
-    return ListView(
-      children: [
-        _swiperWidget(),
-        SizedBox(height: ScreenAdapter.height(12)),
-        _titleWidget("猜你喜欢"),
-        SizedBox(height: ScreenAdapter.height(12)),
-        _hotProductListWidget(),
-        _titleWidget("热门推荐"),
-        _recProductListWidget()
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        leading: const IconButton(
+          icon: Icon(Icons.center_focus_weak, size: 28, color: Colors.black87),
+          onPressed: null,
+        ),
+        title: InkWell(
+          child: Container(
+            height: ScreenAdapter.height(68),
+            decoration: BoxDecoration(
+                color: const Color.fromRGBO(233, 233, 233, 0.8),
+                borderRadius: BorderRadius.circular(30)),
+            padding: const EdgeInsets.only(left: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const Icon(Icons.search),
+                Text("笔记本", style: TextStyle(fontSize: ScreenAdapter.size(28)))
+              ],
+            ),
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, '/search');
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.message, size: 28, color: Colors.black87),
+            onPressed: null,
+          )
+        ],
+      ),
+      body: ListView(
+        children: [
+          _swiperWidget(),
+          SizedBox(height: ScreenAdapter.height(12)),
+          _titleWidget("猜你喜欢"),
+          SizedBox(height: ScreenAdapter.height(12)),
+          _hotProductListWidget(),
+          _titleWidget("热门推荐"),
+          _recProductListWidget()
+        ],
+      ),
     );
   }
-
-
 }

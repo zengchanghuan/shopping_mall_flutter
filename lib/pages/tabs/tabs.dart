@@ -34,43 +34,6 @@ class _TabsState extends State<Tabs> {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: const Size(750, 1334));
     return Scaffold(
-      appBar: _currentIndex != 3
-          ? AppBar(
-              leading: const IconButton(
-                icon: Icon(Icons.center_focus_weak,
-                    size: 28, color: Colors.black87),
-                onPressed: null,
-              ),
-              title: InkWell(
-                child: Container(
-                  height: ScreenAdapter.height(68),
-                  decoration: BoxDecoration(
-                      color: const Color.fromRGBO(233, 233, 233, 0.8),
-                      borderRadius: BorderRadius.circular(30)),
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      const Icon(Icons.search),
-                      Text("笔记本",
-                          style: TextStyle(fontSize: ScreenAdapter.size(28)))
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, '/search');
-                },
-              ),
-              actions: const <Widget>[
-                IconButton(
-                  icon: Icon(Icons.message, size: 28, color: Colors.black87),
-                  onPressed: null,
-                )
-              ],
-            )
-          : AppBar(
-              title: const Text("用户中心"),
-            ),
       body: PageView(
         controller: _pageController,
         children: _pageList,

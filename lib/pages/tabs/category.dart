@@ -5,7 +5,7 @@ import '../../config/config.dart';
 import '../../serivces/screen_adapter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../model/cate_model.dart';
-import '../../widget/loading_widget.dart';
+
 class CategoryPage extends StatefulWidget {
   const CategoryPage({Key? key}) : super(key: key);
 
@@ -13,7 +13,8 @@ class CategoryPage extends StatefulWidget {
   State<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClientMixin{
+class _CategoryPageState extends State<CategoryPage>
+    with AutomaticKeepAliveClientMixin {
   int _selectIndex = 0;
   List _leftCateList = [];
   List _rightCateList = [];
@@ -21,7 +22,6 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
-
 
   @override
   void initState() {
@@ -116,12 +116,9 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
                 pic = Config.domain + pic.replaceAll('\\', '/');
 
                 return InkWell(
-                  onTap: (){
-
-                    Navigator.pushNamed(context, '/productList',arguments: {
-                      "cid":_rightCateList[index].sId
-                    });
-
+                  onTap: () {
+                    Navigator.pushNamed(context, '/productList',
+                        arguments: {"cid": _rightCateList[index].sId});
                   },
                   child: Column(
                     children: <Widget>[
@@ -170,11 +167,44 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
 
     //获取计算后的高度
     var rightItemHeight = rightItemWidth + ScreenAdapter.height(28);
-    return Row(
-      children: <Widget>[
-        _leftCateWidget(leftWidth),
-        _rightCateWidget(rightItemWidth, rightItemHeight)
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        leading: const IconButton(
+          icon: Icon(Icons.center_focus_weak, size: 28, color: Colors.black87),
+          onPressed: null,
+        ),
+        title: InkWell(
+          child: Container(
+            height: ScreenAdapter.height(68),
+            decoration: BoxDecoration(
+                color: const Color.fromRGBO(233, 233, 233, 0.8),
+                borderRadius: BorderRadius.circular(30)),
+            padding: const EdgeInsets.only(left: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const Icon(Icons.search),
+                Text("笔记本", style: TextStyle(fontSize: ScreenAdapter.size(28)))
+              ],
+            ),
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, '/search');
+          },
+        ),
+        actions: const <Widget>[
+          IconButton(
+            icon: Icon(Icons.message, size: 28, color: Colors.black87),
+            onPressed: null,
+          )
+        ],
+      ),
+      body: Row(
+        children: <Widget>[
+          _leftCateWidget(leftWidth),
+          _rightCateWidget(rightItemWidth, rightItemHeight)
+        ],
+      ),
     );
   }
 }

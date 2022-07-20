@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'routers/router.dart';
+import 'provider/cart_provider.dart';
+import 'package:provider/provider.dart';
+import 'provider/Counter.dart';
 
 void main() => runApp(const MyApp());
 
@@ -14,12 +18,16 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: "/",
-      onGenerateRoute: onGenerateRoute,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primaryColor: Colors.white
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => Counter())
+      ],
+      child: MaterialApp(
+        initialRoute: "/",
+        onGenerateRoute: onGenerateRoute,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primaryColor: Colors.white),
       ),
     );
   }
