@@ -31,8 +31,6 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
     if (kDebugMode) {
       print(_attr);
     }
-
-
   }
 
   List<Widget> _getAttrItemWidget(attrItem) {
@@ -80,7 +78,7 @@ class _ProductContentFirstState extends State<ProductContentFirst> {
   _attrBottomSheet() {
     showModalBottomSheet(
         context: context,
-        builder: (contex) {
+        builder: (context) {
           return Stack(
             children: <Widget>[
               Container(

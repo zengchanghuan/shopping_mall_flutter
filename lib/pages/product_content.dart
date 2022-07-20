@@ -18,8 +18,11 @@ class ProductContent extends StatefulWidget {
   State<ProductContent> createState() => _ProductContentState();
 }
 
-class _ProductContentState extends State<ProductContent> {
+class _ProductContentState extends State<ProductContent> with AutomaticKeepAliveClientMixin {
   final List _productContentList=[];
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState(){
@@ -46,6 +49,7 @@ class _ProductContentState extends State<ProductContent> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
       length: 3,
       child: Scaffold(

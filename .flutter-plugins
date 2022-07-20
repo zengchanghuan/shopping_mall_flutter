@@ -8,3 +8,6 @@ shared_preferences_linux=/Users/zengchanghuan/flutter/.pub-cache/hosted/pub.dart
 shared_preferences_macos=/Users/zengchanghuan/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.4/
 shared_preferences_web=/Users/zengchanghuan/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.4/
 shared_preferences_windows=/Users/zengchanghuan/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.1.1/
+webview_flutter=/Users/zengchanghuan/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-3.0.4/
+webview_flutter_android=/Users/zengchanghuan/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter_android-2.8.14/
+webview_flutter_wkwebview=/Users/zengchanghuan/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter_wkwebview-2.9.1/
