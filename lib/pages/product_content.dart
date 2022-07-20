@@ -1,9 +1,14 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../model/product_content_model.dart';
 import '../serivces/screen_adapter.dart';
 import '../pages/product_content/product_content_second.dart';
 import '../pages/product_content/product_content_first.dart';
 import '../pages/product_content/Product_content_third.dart';
-
+import '../config/config.dart';
+import '../widget/JdButton.dart';
+import '../widget/loading_widget.dart';
 class ProductContent extends StatefulWidget {
   final Map arguments;
 
@@ -14,6 +19,31 @@ class ProductContent extends StatefulWidget {
 }
 
 class _ProductContentState extends State<ProductContent> {
+  final List _productContentList=[];
+
+  @override
+  void initState(){
+    super.initState();
+    _getContentData();
+  }
+  _getContentData() async{
+
+    var api ='${Config.domain}api/pcontent?id=${widget.arguments['id']}';
+
+    if (kDebugMode) {
+      print(api);
+    }
+    var result = await Dio().get(api);
+    var productContent = ProductContentModel.fromJson(result.data);
+    // print(productContent.result.pic);
+
+    // print(productContent.result.title);
+
+    setState(() {
+      _productContentList.add(productContent.result);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -73,26 +103,78 @@ class _ProductContentState extends State<ProductContent> {
             )
           ],
         ),
-        body: Stack(
+        body: _productContentList.isNotEmpty?Stack(
+
           children: <Widget>[
-            const TabBarView(
+
+            TabBarView(
               children: <Widget>[
-                ProductContentFirst(),
-                ProductContentSecond(),
-                ProductContentThird(),
+                ProductContentFirst(_productContentList),
+                ProductContentSecond(_productContentList),
+                const ProductContentThird()
               ],
             ),
             Positioned(
               width: ScreenAdapter.width(750),
-              height: ScreenAdapter.width(120),
-              bottom: 10,
+              height: ScreenAdapter.width(88),
+              bottom: 16,
               child: Container(
-                color: Colors.red,
-                child: const Text("底部"),
+                decoration:const BoxDecoration(
+                    border: Border(
+                        top: BorderSide(
+                            color: Colors.black26,
+                            width: 1
+                        )
+                    ),
+                    color: Colors.white
+                ),
+                child: Row(
+                  children: <Widget>[
+
+                    Container(
+                      padding: EdgeInsets.only(top:ScreenAdapter.height(10)),
+                      width: 100,
+                      height: ScreenAdapter.height(88),
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.shopping_cart,size: ScreenAdapter.size(38)),
+                          Text("购物车",style: TextStyle(
+                              fontSize: ScreenAdapter.size(24)
+                          ))
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: JdButton(
+                        color:const Color.fromRGBO(253, 1, 0, 0.9),
+                        text: "加入购物车",
+                        cb: (){
+                          if (kDebugMode) {
+                            print('加入购物车');
+                          }
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: JdButton(
+                        color:const Color.fromRGBO(255, 165, 0, 0.9),
+                        text: "立即购买",
+                        cb: (){
+                          if (kDebugMode) {
+                            print('立即购买');
+                          }
+                        },
+                      ),
+                    )
+
+                  ],
+                ),
               ),
             )
           ],
-        ),
+        ):const LoadingWidget(),
       ),
     );
   }
