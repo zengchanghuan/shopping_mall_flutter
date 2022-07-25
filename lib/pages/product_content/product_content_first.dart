@@ -4,6 +4,8 @@ import '../../serivces/screen_adapter.dart';
 import '../../widget/JdButton.dart';
 import '../../model/product_content_model.dart';
 import '../../config/config.dart';
+import '../../serivces/event_bus.dart';
+import '../product_content/cart_count.dart';
 
 class ProductContentFirst extends StatefulWidget {
   final List _productContentList;
@@ -26,6 +28,14 @@ class _ProductContentFirstState extends State<ProductContentFirst>
 
   String _selectedValue = "";
 
+  dynamic actionEventBus;
+
+  @override
+  void dispose(){
+    super.dispose();
+    actionEventBus.cancel();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +48,11 @@ class _ProductContentFirstState extends State<ProductContentFirst>
     if (kDebugMode) {
       print(_attr);
     }
+    actionEventBus = eventBus.on<ProductContentEvent>().listen((str) {
+      // print(str);
+      //
+      // _attrBottomSheet();
+    });
   }
 
   //初始化Attr 格式化数据
@@ -58,6 +73,7 @@ class _ProductContentFirstState extends State<ProductContentFirst>
     // print(attr[0].list);
     _getSelectedAttrValue();
   }
+
 
   //改变属性值
   _changeAttr(cate, title, setBottomState) {
@@ -159,7 +175,28 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                       children: <Widget>[
                         Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: _getAttrWidget(setBottomState))
+                            children: _getAttrWidget(setBottomState)),
+                        const Divider(),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          height: ScreenAdapter.height(80),
+                          child: InkWell(
+                            onTap: () {
+                              _attrBottomSheet();
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                const Text("数量: ",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold)),
+
+                                const SizedBox(width: 10),
+                                CartCount(this._productContent)
+                              ],
+                            ),
+                          ),
+                        )
+
                       ],
                     ),
                   ),

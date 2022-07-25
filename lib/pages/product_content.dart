@@ -9,6 +9,8 @@ import '../pages/product_content/Product_content_third.dart';
 import '../config/config.dart';
 import '../widget/JdButton.dart';
 import '../widget/loading_widget.dart';
+import '../serivces/event_bus.dart';
+
 class ProductContent extends StatefulWidget {
   final Map arguments;
 
@@ -18,20 +20,21 @@ class ProductContent extends StatefulWidget {
   State<ProductContent> createState() => _ProductContentState();
 }
 
-class _ProductContentState extends State<ProductContent> with AutomaticKeepAliveClientMixin {
-  final List _productContentList=[];
+class _ProductContentState extends State<ProductContent>
+    with AutomaticKeepAliveClientMixin {
+  final List _productContentList = [];
 
   @override
   bool get wantKeepAlive => true;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _getContentData();
   }
-  _getContentData() async{
 
-    var api ='${Config.domain}api/pcontent?id=${widget.arguments['id']}';
+  _getContentData() async {
+    var api = '${Config.domain}api/pcontent?id=${widget.arguments['id']}';
 
     if (kDebugMode) {
       print(api);
@@ -107,78 +110,79 @@ class _ProductContentState extends State<ProductContent> with AutomaticKeepAlive
             )
           ],
         ),
-        body: _productContentList.isNotEmpty?Stack(
-
-          children: <Widget>[
-
-            TabBarView(
-              children: <Widget>[
-                ProductContentFirst(_productContentList),
-                ProductContentSecond(_productContentList),
-                const ProductContentThird()
-              ],
-            ),
-            Positioned(
-              width: ScreenAdapter.width(750),
-              height: ScreenAdapter.width(88),
-              bottom: 16,
-              child: Container(
-                decoration:const BoxDecoration(
-                    border: Border(
-                        top: BorderSide(
-                            color: Colors.black26,
-                            width: 1
-                        )
-                    ),
-                    color: Colors.white
-                ),
-                child: Row(
-                  children: <Widget>[
-
-                    Container(
-                      padding: EdgeInsets.only(top:ScreenAdapter.height(10)),
-                      width: 100,
-                      height: ScreenAdapter.height(88),
-                      child: Column(
+        body: _productContentList.isNotEmpty
+            ? Stack(
+                children: <Widget>[
+                  TabBarView(
+                    children: <Widget>[
+                      ProductContentFirst(_productContentList),
+                      ProductContentSecond(_productContentList),
+                      const ProductContentThird()
+                    ],
+                  ),
+                  Positioned(
+                    width: ScreenAdapter.width(750),
+                    height: ScreenAdapter.width(88),
+                    bottom: 16,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              top: BorderSide(color: Colors.black26, width: 1)),
+                          color: Colors.white),
+                      child: Row(
                         children: <Widget>[
-                          Icon(Icons.shopping_cart,size: ScreenAdapter.size(38)),
-                          Text("购物车",style: TextStyle(
-                              fontSize: ScreenAdapter.size(24)
-                          ))
+                          Container(
+                            padding:
+                                EdgeInsets.only(top: ScreenAdapter.height(10)),
+                            width: 100,
+                            height: ScreenAdapter.height(88),
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.shopping_cart,
+                                    size: ScreenAdapter.size(38)),
+                                Text("购物车",
+                                    style: TextStyle(
+                                        fontSize: ScreenAdapter.size(24)))
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: JdButton(
+                              color: const Color.fromRGBO(253, 1, 0, 0.9),
+                              text: "加入购物车",
+                              cb: () {
+                                if (_productContentList[0].attr.length > 0) {
+                                  eventBus.fire(ProductContentEvent("加入购物车"));
+                                } else {
+                                  print("加入购物车");
+                                }
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: JdButton(
+                              color: const Color.fromRGBO(255, 165, 0, 0.9),
+                              text: "立即购买",
+                              cb: () {
+                                if (_productContentList[0].attr.length > 0) {
+                                  eventBus.fire(ProductContentEvent("立即购买"));
+                                } else {
+                                  if (kDebugMode) {
+                                    print('立即购买');
+                                  }
+                                }
+                              },
+                            ),
+                          )
                         ],
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: JdButton(
-                        color:const Color.fromRGBO(253, 1, 0, 0.9),
-                        text: "加入购物车",
-                        cb: (){
-                          if (kDebugMode) {
-                            print('加入购物车');
-                          }
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: JdButton(
-                        color:const Color.fromRGBO(255, 165, 0, 0.9),
-                        text: "立即购买",
-                        cb: (){
-                          if (kDebugMode) {
-                            print('立即购买');
-                          }
-                        },
-                      ),
-                    )
-
-                  ],
-                ),
-              ),
-            )
-          ],
-        ):const LoadingWidget(),
+                  )
+                ],
+              )
+            : const LoadingWidget(),
       ),
     );
   }

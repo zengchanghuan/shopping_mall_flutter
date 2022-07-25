@@ -40,6 +40,7 @@ dependencies:
   shared_preferences: ^2.0.15
   webview_flutter: ^3.0.4
   provider: ^6.0.3
+  event_bus: ^2.0.0
 
 
 
