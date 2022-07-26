@@ -32,7 +32,7 @@ class _ProductContentFirstState extends State<ProductContentFirst>
 
   dynamic actionEventBus;
 
-  var cartProvider;
+  dynamic cartProvider;
 
   @override
   void dispose() {
@@ -249,7 +249,7 @@ class _ProductContentFirstState extends State<ProductContentFirst>
 
   @override
   Widget build(BuildContext context) {
-    this.cartProvider = Provider.of<CartProvider>(context);
+    cartProvider = Provider.of<CartProvider>(context);
 
     super.build(context);
     //处理图片

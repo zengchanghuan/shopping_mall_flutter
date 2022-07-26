@@ -51,6 +51,7 @@ class _CartItemState extends State<CartItem> {
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                    Text(
                       "${_itemData["title"]}",
@@ -59,7 +60,7 @@ class _CartItemState extends State<CartItem> {
                     children:  <Widget>[
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("￥${_itemData["price"]}", style: TextStyle(color: Colors.red)),
+                        child: Text("￥${_itemData["price"]}", style: const TextStyle(color: Colors.red)),
                       ),
                       Align(
                         alignment: Alignment.centerRight,
