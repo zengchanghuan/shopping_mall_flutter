@@ -42,7 +42,7 @@ class _CartPageState extends State<CartPage>
           )
         ],
       ),
-      body: Stack(
+      body: cartProvider.cartList.length > 0 ? Stack(
         children: <Widget>[
           ListView(
             children:cartProvider.cartList.map((value){
@@ -95,6 +95,8 @@ class _CartPageState extends State<CartPage>
             ),
           )
         ],
+      ):const Center(
+        child: Text("购物车空空如也……"),
       ),
     );
   }
