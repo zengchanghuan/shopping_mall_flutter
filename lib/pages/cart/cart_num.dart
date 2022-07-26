@@ -4,13 +4,23 @@ import '../../provider/cart_provider.dart';
 import '../../serivces/screen_adapter.dart';
 
 class CartNum extends StatefulWidget {
-  const CartNum({Key? key}) : super(key: key);
+  final Map _itemData;
+
+  const CartNum(this._itemData, {Key? key}) : super(key: key);
 
   @override
   State<CartNum> createState() => _CartNumState();
 }
 
 class _CartNumState extends State<CartNum> {
+  late Map _itemData;
+
+  @override
+  void initState() {
+    super.initState();
+    _itemData = widget._itemData;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -62,7 +72,7 @@ class _CartNumState extends State<CartNum> {
         right: BorderSide(width: 1, color: Colors.black12),
       )),
       height: ScreenAdapter.height(45),
-      child: const Text("1"),
+      child: Text("${_itemData["count"]}"),
     );
   }
 }

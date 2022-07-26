@@ -25,6 +25,8 @@ class _CartPageState extends State<CartPage>
 
   @override
   Widget build(BuildContext context) {
+    var cartProvider = Provider.of<CartProvider>(context);
+
     super.build(context);
     // var counterProvider = Provider.of<Counter>(context);
     //
@@ -43,7 +45,9 @@ class _CartPageState extends State<CartPage>
       body: Stack(
         children: <Widget>[
           ListView(
-            children: const <Widget>[CartItem(), CartItem(), CartItem()],
+            children:cartProvider.cartList.map((value){
+              return CartItem(value);
+            }).toList()
           ),
           Positioned(
             bottom: 0,

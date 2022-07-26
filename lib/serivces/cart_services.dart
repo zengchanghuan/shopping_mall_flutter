@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'storage.dart';
 import '../config/config.dart';
 import 'dart:convert';
@@ -7,7 +9,9 @@ class CartServices {
     //把对象转换成Map类型的数据
     item = CartServices.formatCartData(item);
 
-    print(item);
+    if (kDebugMode) {
+      print(item);
+    }
     /*
       1、获取本地存储的cartList数据
       2、判断cartList是否有数据
