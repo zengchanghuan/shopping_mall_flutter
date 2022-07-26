@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shopping_mall_flutter/serivces/cart_services.dart';
 import '../../serivces/screen_adapter.dart';
 import '../../widget/JdButton.dart';
 import '../../model/product_content_model.dart';
 import '../../config/config.dart';
 import '../../serivces/event_bus.dart';
 import '../product_content/cart_count.dart';
-
+import '../../provider/cart_provider.dart';
 class ProductContentFirst extends StatefulWidget {
   final List _productContentList;
 
@@ -30,8 +32,10 @@ class _ProductContentFirstState extends State<ProductContentFirst>
 
   dynamic actionEventBus;
 
+  var cartProvider;
+
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     actionEventBus.cancel();
   }
@@ -73,7 +77,6 @@ class _ProductContentFirstState extends State<ProductContentFirst>
     // print(attr[0].list);
     _getSelectedAttrValue();
   }
-
 
   //改变属性值
   _changeAttr(cate, title, setBottomState) {
@@ -187,16 +190,14 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                             child: Row(
                               children: <Widget>[
                                 const Text("数量: ",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold)),
-
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
                                 const SizedBox(width: 10),
-                                CartCount(this._productContent)
+                                CartCount(_productContent)
                               ],
                             ),
                           ),
                         )
-
                       ],
                     ),
                   ),
@@ -211,12 +212,13 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                           child: Container(
                             margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                             child: JdButton(
-                              color:const Color.fromRGBO(253, 1, 0, 0.9),
+                              color: const Color.fromRGBO(253, 1, 0, 0.9),
                               text: "加入购物车",
-                              cb: () {
-                                if (kDebugMode) {
-                                  print('加入购物车');
-                                }
+                              cb: () async {
+                                await CartServices.addCart(_productContent);
+                                if (!mounted) return;
+                                Navigator.of(context).pop();
+                                cartProvider.updateCartList();
                               },
                             ),
                           ),
@@ -224,9 +226,9 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                         Expanded(
                           flex: 1,
                           child: Container(
-                              margin:const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: JdButton(
-                                color:const Color.fromRGBO(255, 165, 0, 0.9),
+                                color: const Color.fromRGBO(255, 165, 0, 0.9),
                                 text: "立即购买",
                                 cb: () {
                                   if (kDebugMode) {
@@ -247,6 +249,8 @@ class _ProductContentFirstState extends State<ProductContentFirst>
 
   @override
   Widget build(BuildContext context) {
+    this.cartProvider = Provider.of<CartProvider>(context);
+
     super.build(context);
     //处理图片
     String pic = Config.domain + _productContent.pic;

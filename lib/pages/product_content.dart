@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../model/product_content_model.dart';
 import '../serivces/screen_adapter.dart';
 import '../pages/product_content/product_content_second.dart';
@@ -10,7 +11,8 @@ import '../config/config.dart';
 import '../widget/JdButton.dart';
 import '../widget/loading_widget.dart';
 import '../serivces/event_bus.dart';
-
+import '../serivces/cart_services.dart';
+import '../provider/cart_provider.dart';
 class ProductContent extends StatefulWidget {
   final Map arguments;
 
@@ -52,6 +54,7 @@ class _ProductContentState extends State<ProductContent>
 
   @override
   Widget build(BuildContext context) {
+    var cartProvider = Provider.of<CartProvider>(context);
     super.build(context);
     return DefaultTabController(
       length: 3,
@@ -151,11 +154,14 @@ class _ProductContentState extends State<ProductContent>
                             child: JdButton(
                               color: const Color.fromRGBO(253, 1, 0, 0.9),
                               text: "加入购物车",
-                              cb: () {
+                              cb: () async {
                                 if (_productContentList[0].attr.length > 0) {
                                   eventBus.fire(ProductContentEvent("加入购物车"));
                                 } else {
                                   print("加入购物车");
+                                  await CartServices.addCart(_productContentList[0]);
+                                  cartProvider.updateCartList();
+
                                 }
                               },
                             ),
