@@ -22,6 +22,7 @@ class _CartNumState extends State<CartNum> {
     _itemData = widget._itemData;
   }
 
+
   @override
   Widget build(BuildContext context) {
     cartProvider = Provider.of<CartProvider>(context);
