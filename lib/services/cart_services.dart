@@ -99,4 +99,23 @@ class CartServices {
     data['checked'] = true;
     return data;
   }
+  static getCheckOutData() async {
+    List cartListData = [];
+    List tempCheckOutData = [];
+
+    String? cartList = await Storage.getString('cartList');
+    if (cartList != null) {
+      cartListData = json.decode(cartList);
+    }else{
+      cartListData = [];
+    }
+    for (var i = 0; i < cartListData.length; i++) {
+      if (cartListData[i]["checked"] == true) {
+        tempCheckOutData.add(cartListData[i]);
+      }
+    }
+
+    return tempCheckOutData;
+  }
+
 }

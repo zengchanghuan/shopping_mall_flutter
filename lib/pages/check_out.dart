@@ -74,21 +74,6 @@ class _CheckOutState extends State<CheckOut> {
                         Navigator.pushNamed(context, '/addressList');
                       },
                     )
-                    /*
-                    const SizedBox(height: 10),
-                    ListTile(
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const <Widget>[
-                          Text("张三  15201681234"),
-                          SizedBox(height: 10),
-                          Text("北京市海淀区西二旗"),
-                        ],
-                      ),
-                      trailing: const Icon(Icons.navigate_next),
-                    ),
-                    const SizedBox(height: 10),
-                    */
                   ],
                 ),
               ),

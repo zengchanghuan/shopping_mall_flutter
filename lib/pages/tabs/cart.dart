@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_mall_flutter/provider/cart_provider.dart';
+import 'package:shopping_mall_flutter/provider/check_out_provider.dart';
+import '../../services/cart_services.dart';
 import '../../services/screen_adapter.dart';
+import '../../services/user_sevices.dart';
 import '../cart/cart_Item.dart';
 import '../../provider/cart_provider.dart';
 import '../../pages/check_out.dart';
@@ -15,6 +19,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage>
     with AutomaticKeepAliveClientMixin {
   bool _isEdit = false;
+  dynamic checkOutProvider;
 
   @override
   bool get wantKeepAlive => true;
@@ -23,17 +28,43 @@ class _CartPageState extends State<CartPage>
   void initState() {
     super.initState();
   }
-  doCheckOut(){
-
-    //判断用户有没有登录    保存购物车选中的数据
-
-    Navigator.pushNamed(context, '/checkOut');
+  doCheckOut() async {
+    //1、获取购物车选中的数据
+    List checkOutData = await CartServices.getCheckOutData();
+    //2、保存购物车选中的数据
+    checkOutProvider.changeCheckOutListData(checkOutData);
+    //3、购物车有没有选中的数据
+    if (checkOutData.isNotEmpty) {
+      //4、判断用户有没有登录
+      var loginState = await UserServices.getUserLoginState();
+      if (loginState) {
+        if(!mounted) return;
+        Navigator.pushNamed(context, '/checkOut');
+      } else {
+        Fluttertoast.showToast(
+          msg: '您还没有登录，请登录以后再去结算',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+        );
+        if(!mounted) return;
+        Navigator.pushNamed(context, '/login');
+      }
+    } else {
+      Fluttertoast.showToast(
+        msg: '购物车没有选中的数据',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+      );
+    }
   }
+
 
 
   @override
   Widget build(BuildContext context) {
     var cartProvider = Provider.of<CartProvider>(context);
+    checkOutProvider = Provider.of<CheckOutProvider>(context);
+
     super.build(context);
     return Scaffold(
       appBar: AppBar(
