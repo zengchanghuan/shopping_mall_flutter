@@ -49,13 +49,17 @@ class _UserPageState extends State<UserPage>
                     ),
                   ),
                 ),
-                // Expanded(
-                //   flex: 1,
-                //   child: Text("登录/注册",style: TextStyle(
-                //     color: Colors.white
-                //   )),
-                // )
+                Expanded(
+                  flex: 1,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    child: const Text("登录/注册", style: TextStyle(color: Colors.white)),
+                  ),
+                )
 
+                /*
                 Expanded(
                   flex: 1,
                   child: Column(
@@ -73,6 +77,7 @@ class _UserPageState extends State<UserPage>
                     ],
                   ),
                 )
+                */
               ],
             ),
           ),

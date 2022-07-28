@@ -4,9 +4,10 @@ import '../serivces/screen_adapter.dart';
 class JdButton extends StatelessWidget {
 
   final Color color;
-  final String text; 
+  final String text;
+  final double height;
   final Function()? cb;  //注意：新版Flutter中需要把cb定义成Function()类型或者vconst ar类型
-  const JdButton({Key? key,this.color=Colors.black,this.text="按钮",this.cb}) : super(key: key);
+  const JdButton({Key? key,this.color=Colors.black,this.text="按钮",this.cb,this.height = 68}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {   
