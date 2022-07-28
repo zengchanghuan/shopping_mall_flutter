@@ -118,6 +118,7 @@ class _ProductContentState extends State<ProductContent>
             ? Stack(
                 children: <Widget>[
                   TabBarView(
+                    physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
                       ProductContentFirst(_productContentList),
                       ProductContentSecond(_productContentList),
