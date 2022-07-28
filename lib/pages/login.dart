@@ -58,7 +58,9 @@ class _LoginState extends State<Login> {
               text: "请输入密码",
               password: true,
               onChanged: (value) {
-                print(value);
+                if (kDebugMode) {
+                  print(value);
+                }
               },
             ),
 

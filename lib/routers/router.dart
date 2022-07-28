@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import '../pages/register_first.dart';
+import '../pages/register_second.dart';
+import '../pages/register_third.dart';
 import '../pages/tabs/Tabs.dart';
 import '../pages/search.dart';
 import '../pages/product_list.dart';
 import '../pages/product_content.dart';
 import '../pages/tabs/cart.dart';
 import '../pages/login.dart';
+
 //配置路由
 final Map<String, Function> routes = {
   '/': (context) => const Tabs(),
   '/search': (context) => const Search(),
-  '/login': (context) => Login(),
+  '/login': (context) => const Login(),
   '/cart': (context) => const CartPage(),
-  '/productList': (context,{arguments}) => ProductList(arguments:arguments),
-  '/productContent': (context,{arguments}) => ProductContent(arguments:arguments),
-  
+  '/registerFirst': (context) => const RegisterFirst(),
+  '/registerSecond': (context) => const RegisterSecond(),
+  '/registerThird': (context) => const RegisterThird(),
+  '/productList': (context, {arguments}) => ProductList(arguments: arguments),
+  '/productContent': (context, {arguments}) =>
+      ProductContent(arguments: arguments),
 };
 
 //固定写法
