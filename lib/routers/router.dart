@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../pages/check_out.dart';
 import '../pages/register_first.dart';
 import '../pages/register_second.dart';
 import '../pages/register_third.dart';
@@ -23,6 +24,8 @@ final Map<String, Function> routes = {
   '/productList': (context, {arguments}) => ProductList(arguments: arguments),
   '/productContent': (context, {arguments}) =>
       ProductContent(arguments: arguments),
+  '/checkOut': (context) => const CheckOut(),
+
 };
 
 //固定写法

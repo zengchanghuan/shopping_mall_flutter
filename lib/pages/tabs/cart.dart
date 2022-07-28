@@ -5,7 +5,7 @@ import '../../serivces/screen_adapter.dart';
 import '../cart/cart_Item.dart';
 import '../../provider/Counter.dart';
 import '../../provider/cart_provider.dart';
-
+import '../../pages/check_out.dart';
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
 
@@ -24,6 +24,13 @@ class _CartPageState extends State<CartPage>
   void initState() {
     super.initState();
   }
+  doCheckOut(){
+
+    //判断用户有没有登录    保存购物车选中的数据
+
+    Navigator.pushNamed(context, '/checkOut');
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +108,7 @@ class _CartPageState extends State<CartPage>
                                     backgroundColor:
                                         MaterialStateProperty.all(Colors.red),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: doCheckOut,
                                   child: const Text("结算",
                                       style: TextStyle(color: Colors.white)),
                                 ),
