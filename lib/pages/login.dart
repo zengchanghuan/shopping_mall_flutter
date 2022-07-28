@@ -1,8 +1,16 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../config/config.dart';
+import '../serivces/event_bus.dart';
 import '../serivces/screen_adapter.dart';
 import '../widget/JdButton.dart';
 import '../widget/JdText.dart';
+import '../serivces/storage.dart';
+import '../serivces/event_bus.dart';
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -11,6 +19,55 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    //登录页面消失时通知更新状态
+    eventBus.fire(UserEvent('登录成功'));
+  }
+
+  String username = '';
+  String password = '';
+
+  doLogin() async {
+    RegExp reg = RegExp(r"^1\d{10}$");
+    if (!reg.hasMatch(username)) {
+      Fluttertoast.showToast(
+        msg: '手机号格式不对',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+      );
+    } else if (password.length < 6) {
+      Fluttertoast.showToast(
+        msg: '密码不正确',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+      );
+    } else {
+      var api = '${Config.domain}api/doLogin';
+      var response = await Dio()
+          .post(api, data: {"username": username, "password": password});
+      if (response.data["success"]) {
+        if (kDebugMode) {
+          print(response.data);
+        }
+        //保存用户信息
+        Storage.setString('userInfo', json.encode(response.data["userinfo"]));
+
+        if(!mounted) return;
+        Navigator.pop(context);
+      } else {
+        Fluttertoast.showToast(
+          msg: '${response.data["message"]}',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +105,7 @@ class _LoginState extends State<Login> {
             JdText(
               text: "请输入用户名",
               onChanged: (value) {
+                username = value;
                 if (kDebugMode) {
                   print(value);
                 }
@@ -58,6 +116,7 @@ class _LoginState extends State<Login> {
               text: "请输入密码",
               password: true,
               onChanged: (value) {
+                password = value;
                 if (kDebugMode) {
                   print(value);
                 }
@@ -92,9 +151,7 @@ class _LoginState extends State<Login> {
               text:"登录",
               color: Colors.red,
               height: 74,
-              cb: (){
-
-              },
+              cb: doLogin,
             )
           ],
         ),

@@ -9,3 +9,15 @@ class ProductContentEvent {
    str = string;
   }
 }
+
+//用户中心广播
+class UserEvent {
+  String str;
+
+  UserEvent(this.str);
+}
+
+class AddressEvent{
+  String str;
+  AddressEvent(this.str);
+}
