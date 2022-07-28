@@ -16,8 +16,10 @@ final Map<String, Function> routes = {
   '/login': (context) => const Login(),
   '/cart': (context) => const CartPage(),
   '/registerFirst': (context) => const RegisterFirst(),
-  '/registerSecond': (context) => const RegisterSecond(),
-  '/registerThird': (context) => const RegisterThird(),
+  '/registerSecond': (context, {arguments}) =>
+      RegisterSecond(arguments: arguments),
+  '/registerThird': (context, {arguments}) =>
+      RegisterThird(arguments: arguments),
   '/productList': (context, {arguments}) => ProductList(arguments: arguments),
   '/productContent': (context, {arguments}) =>
       ProductContent(arguments: arguments),
