@@ -1,8 +1,15 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../services/event_bus.dart';
+import '../config/config.dart';
+import '../services/event_bus.dart';
 import '../services/screen_adapter.dart';
 import '../provider/check_out_provider.dart';
+import '../services/sign_services.dart';
+import '../services/user_sevices.dart';
 
 class CheckOut extends StatefulWidget {
   const CheckOut({Key? key}) : super(key: key);
@@ -12,6 +19,41 @@ class CheckOut extends StatefulWidget {
 }
 
 class _CheckOutState extends State<CheckOut> {
+  List _addressList=[];
+  @override
+  void initState() {
+    super.initState();
+    _getDefaultAddress();
+
+    //监听广播
+    eventBus.on<CheckOutEvent>().listen((event) {
+      if (kDebugMode) {
+        print(event.str);
+      }
+      _getDefaultAddress();
+    });
+  }
+
+  _getDefaultAddress() async {
+    List userinfo = await UserServices.getUserInfo();
+
+    // print('1234');
+    var tempJson = {
+      "uid": userinfo[0]["_id"],
+      "salt": userinfo[0]["salt"]
+    };
+    var sign = SignServices.getSign(tempJson);
+    var api = '${Config.domain}api/oneAddressList?uid=${userinfo[0]["_id"]}&sign=${sign}';
+    var response = await Dio().get(api);
+    if (kDebugMode) {
+      print(response);
+    }
+    setState(() {
+      _addressList=response.data['result'];
+    });
+
+
+  }
   Widget _checkOutItem(item) {
     return Row(
       children: <Widget>[
@@ -64,16 +106,31 @@ class _CheckOutState extends State<CheckOut> {
                 color: Colors.white,
                 child: Column(
                   children: <Widget>[
-                    ListTile(
-                      leading: const Icon(Icons.add_location),
-                      title: const Center(
-                        child: Text("请添加收货地址"),
+                    SizedBox(height: 10),
+                    _addressList.length>0?ListTile(
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text("${_addressList[0]["name"]}  ${_addressList[0]["phone"]}"),
+                          SizedBox(height: 10),
+                          Text("${_addressList[0]["address"]}"),
+                        ],
                       ),
-                      trailing: const Icon(Icons.navigate_next),
-                      onTap: (){
+                      trailing: Icon(Icons.navigate_next),
+                      onTap: () {
                         Navigator.pushNamed(context, '/addressList');
                       },
-                    )
+                    ):ListTile(
+                      leading: Icon(Icons.add_location),
+                      title: Center(
+                        child: Text("请添加收货地址"),
+                      ),
+                      trailing: Icon(Icons.navigate_next),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/addressAdd');
+                      },
+                    ),
+                    SizedBox(height: 10),
                   ],
                 ),
               ),
