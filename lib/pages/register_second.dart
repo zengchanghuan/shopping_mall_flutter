@@ -100,7 +100,7 @@ class _RegisterSecondState extends State<RegisterSecond> {
             const SizedBox(height: 40),
             Stack(
               children: <Widget>[
-                Container(
+                SizedBox(
                   height: ScreenAdapter.height(100),
                   child: JdText(
                     text: "请输入验证码",
