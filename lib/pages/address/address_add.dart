@@ -1,15 +1,14 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../services/screen_adapter.dart';
-import '../../widget/JdButton.dart';
 import '../../widget/JdText.dart';
-
+import '../../widget/JdButton.dart';
 import 'package:city_pickers/city_pickers.dart';
-import '../../services/event_bus.dart';
 import '../../services/user_sevices.dart';
 import '../../services/sign_services.dart';
-import '../../config/config.dart';
+import '../../config/Config.dart';
+import 'package:dio/dio.dart';
+import '../../services/event_bus.dart';
 
 class AddressAdd extends StatefulWidget {
   const AddressAdd({Key? key}) : super(key: key);
@@ -24,13 +23,12 @@ class _AddressAddState extends State<AddressAdd> {
   String phone = '';
   String address = '';
 
+  //监听页面销毁的事件
   @override
-  void dispose() {
-    // TODO: implement dispose
+  dispose() {
     super.dispose();
-    //新增地址需要广播，地址列表才会及时列新
     eventBus.fire(AddressEvent('增加成功...'));
-
+    eventBus.fire(CheckOutEvent('改收货地址成功...'));
   }
 
   @override
@@ -76,7 +74,6 @@ class _AddressAddState extends State<AddressAdd> {
                     ],
                   ),
                   onTap: () async {
-                    //最新版本的Flutter注意返回的类型  需要判断是否为空
                     Result? result = await CityPickers.showCityPicker(
                         context: context,
                         cancelWidget: const Text("取消",
@@ -84,13 +81,12 @@ class _AddressAddState extends State<AddressAdd> {
                         confirmWidget: const Text("确定",
                             style: TextStyle(color: Colors.blue)));
 
-                    // print(result);
-                    setState(() {
-                      if (result != null) {
+                    if (result != null) {
+                      setState(() {
                         area =
                             "${result.provinceName}/${result.cityName}/${result.areaName}";
-                      }
-                    });
+                      });
+                    }
                   },
                 ),
               ),
@@ -136,9 +132,10 @@ class _AddressAddState extends State<AddressAdd> {
                       "sign": sign
                     });
 
-                    // if(result.data["success"]){
+                    if(result.data["success"]){
 
-                    // }
+                    }
+                    if (!mounted) return;
                     Navigator.pop(context);
                   })
             ],

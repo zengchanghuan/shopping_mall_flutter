@@ -31,7 +31,6 @@ final Map<String, Function> routes = {
   '/addressAdd': (context) => const AddressAdd(),
   '/addressEdit': (context) => const AddressEdit(),
   '/addressList': (context) => const AddressList(),
-
 };
 
 //固定写法

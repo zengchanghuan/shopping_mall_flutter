@@ -11,9 +11,9 @@ class _AddressEditState extends State<AddressEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('修改收货地址'),
-      ),
-    );
+        appBar: AppBar(
+          title: const Text("修改收货地址"),
+        ),
+        body: const Text("修改收货地址"));
   }
 }
