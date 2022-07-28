@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_mall_flutter/serivces/cart_services.dart';
-import '../../serivces/screen_adapter.dart';
+import 'package:shopping_mall_flutter/services/cart_services.dart';
+import '../../services/screen_adapter.dart';
 import '../../widget/JdButton.dart';
 import '../../model/product_content_model.dart';
 import '../../config/config.dart';
-import '../../serivces/event_bus.dart';
+import '../../services/event_bus.dart';
 import '../product_content/cart_count.dart';
 import '../../provider/cart_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';

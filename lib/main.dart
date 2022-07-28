@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'routers/router.dart';
 import 'provider/cart_provider.dart';
 import 'package:provider/provider.dart';
-import 'provider/Counter.dart';
-
+import 'provider/check_out_provider.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
@@ -20,8 +19,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => CheckOutProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
-        ChangeNotifierProvider(create: (_) => Counter())
       ],
       child: MaterialApp(
         initialRoute: "/",

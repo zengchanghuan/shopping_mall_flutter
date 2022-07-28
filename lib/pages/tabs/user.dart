@@ -2,10 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import '../../provider/Counter.dart';
-import '../../serivces/event_bus.dart';
-import '../../serivces/screen_adapter.dart';
-import '../../serivces/user_sevices.dart';
+import '../../services/event_bus.dart';
+import '../../services/screen_adapter.dart';
+import '../../services/user_sevices.dart';
 import '../../widget/JdButton.dart';
 
 class UserPage extends StatefulWidget {

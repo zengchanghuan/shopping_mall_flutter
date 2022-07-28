@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../serivces/screen_adapter.dart';
+import '../../services/screen_adapter.dart';
 import '../config/config.dart';
 import 'package:dio/dio.dart';
 import '../model/product_model.dart';

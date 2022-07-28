@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../config/config.dart';
-import '../serivces/screen_adapter.dart';
+import '../services/screen_adapter.dart';
 import '../widget/JdButton.dart';
 import '../widget/JdText.dart';
 

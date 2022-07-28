@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../pages/address/address_add.dart';
+import '../pages/address/address_edit.dart';
+import '../pages/address/address_list.dart';
 import '../pages/check_out.dart';
 import '../pages/register_first.dart';
 import '../pages/register_second.dart';
@@ -25,6 +28,9 @@ final Map<String, Function> routes = {
   '/productContent': (context, {arguments}) =>
       ProductContent(arguments: arguments),
   '/checkOut': (context) => const CheckOut(),
+  '/addressAdd': (context) => const AddressAdd(),
+  '/addressEdit': (context) => const AddressEdit(),
+  '/addressList': (context) => const AddressList(),
 
 };
 

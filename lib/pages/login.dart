@@ -5,12 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../config/config.dart';
-import '../serivces/event_bus.dart';
-import '../serivces/screen_adapter.dart';
+import '../services/event_bus.dart';
+import '../services/screen_adapter.dart';
 import '../widget/JdButton.dart';
 import '../widget/JdText.dart';
-import '../serivces/storage.dart';
-import '../serivces/event_bus.dart';
+import '../services/storage.dart';
+import '../services/event_bus.dart';
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 

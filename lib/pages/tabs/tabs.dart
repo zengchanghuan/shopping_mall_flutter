@@ -4,7 +4,7 @@ import 'home.dart';
 import 'cart.dart';
 import 'category.dart';
 import 'user.dart';
-import '../../serivces/screen_adapter.dart';
+import '../../services/screen_adapter.dart';
 
 class Tabs extends StatefulWidget {
   const Tabs({Key? key}) : super(key: key);

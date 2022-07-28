@@ -1,4 +1,4 @@
-import '../serivces/storage.dart';
+import '../services/storage.dart';
 import 'dart:convert';
 
 class UserServices {

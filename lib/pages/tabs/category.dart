@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../config/config.dart';
-import '../../serivces/screen_adapter.dart';
+import '../../services/screen_adapter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../model/cate_model.dart';
 

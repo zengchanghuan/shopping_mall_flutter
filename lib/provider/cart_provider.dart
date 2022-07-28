@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import '../serivces/storage.dart';
+import '../services/storage.dart';
 
 class CartProvider with ChangeNotifier {
   List _cartList = []; //状态

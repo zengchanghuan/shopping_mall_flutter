@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper_null_safety_flutter3/flutter_swiper_null_safety_flutter3.dart';
-import '../../serivces/screen_adapter.dart';
+import '../../services/screen_adapter.dart';
 import '../../model/focus_model.dart';
 import 'package:dio/dio.dart';
 import '../../config/config.dart';

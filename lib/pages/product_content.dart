@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import '../model/product_content_model.dart';
-import '../serivces/screen_adapter.dart';
+import '../services/screen_adapter.dart';
 import '../pages/product_content/product_content_second.dart';
 import '../pages/product_content/product_content_first.dart';
 import '../pages/product_content/Product_content_third.dart';
 import '../config/config.dart';
 import '../widget/JdButton.dart';
 import '../widget/loading_widget.dart';
-import '../serivces/event_bus.dart';
-import '../serivces/cart_services.dart';
+import '../services/event_bus.dart';
+import '../services/cart_services.dart';
 import '../provider/cart_provider.dart';
 class ProductContent extends StatefulWidget {
   final Map arguments;

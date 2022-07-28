@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../serivces/screen_adapter.dart';
+import '../../services/screen_adapter.dart';
 import '../../model/product_content_model.dart';
 
 class CartCount extends StatefulWidget {

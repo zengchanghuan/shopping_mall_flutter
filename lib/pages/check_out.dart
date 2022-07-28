@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../serivces/screen_adapter.dart';
+import '../services/screen_adapter.dart';
+import '../provider/check_out_provider.dart';
 
 class CheckOut extends StatefulWidget {
   const CheckOut({Key? key}) : super(key: key);
@@ -10,14 +12,12 @@ class CheckOut extends StatefulWidget {
 }
 
 class _CheckOutState extends State<CheckOut> {
-  Widget _checkOutItem() {
+  Widget _checkOutItem(item) {
     return Row(
       children: <Widget>[
         SizedBox(
           width: ScreenAdapter.width(160),
-          child: Image.network(
-              "https://www.itying.com/images/flutter/list2.jpg",
-              fit: BoxFit.cover),
+          child: Image.network("${item["pic"]}", fit: BoxFit.cover),
         ),
         Expanded(
             flex: 1,
@@ -27,18 +27,18 @@ class _CheckOutState extends State<CheckOut> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Text("Flutter仿京东商城项目实战视频教程", maxLines: 2),
-                  const Text("白色,175", maxLines: 2),
+                  Text("${item["title"]}", maxLines: 2),
+                  Text("${item["selectedAttr"]}", maxLines: 2),
                   Stack(
-                    children: const <Widget>[
+                    children: <Widget>[
                       Align(
                         alignment: Alignment.centerLeft,
-                        child:
-                            Text("￥111", style: TextStyle(color: Colors.red)),
+                        child: Text("￥${item["price"]}",
+                            style: const TextStyle(color: Colors.red)),
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text("x2"),
+                        child: Text("x${item["count"]}"),
                       )
                     ],
                   )
@@ -51,6 +51,7 @@ class _CheckOutState extends State<CheckOut> {
 
   @override
   Widget build(BuildContext context) {
+    var checkOutProvider = Provider.of<CheckOutProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("结算"),
@@ -63,13 +64,17 @@ class _CheckOutState extends State<CheckOut> {
                 color: Colors.white,
                 child: Column(
                   children: <Widget>[
-                    // ListTile(
-                    //   leading: Icon(Icons.add_location),
-                    //   title: Center(
-                    //     child: Text("请添加收货地址"),
-                    //   ),
-                    //   trailing: Icon(Icons.navigate_next),
-                    // )
+                    ListTile(
+                      leading: const Icon(Icons.add_location),
+                      title: const Center(
+                        child: Text("请添加收货地址"),
+                      ),
+                      trailing: const Icon(Icons.navigate_next),
+                      onTap: (){
+                        Navigator.pushNamed(context, '/addressList');
+                      },
+                    )
+                    /*
                     const SizedBox(height: 10),
                     ListTile(
                       title: Column(
@@ -83,6 +88,7 @@ class _CheckOutState extends State<CheckOut> {
                       trailing: const Icon(Icons.navigate_next),
                     ),
                     const SizedBox(height: 10),
+                    */
                   ],
                 ),
               ),
@@ -91,14 +97,11 @@ class _CheckOutState extends State<CheckOut> {
                 color: Colors.white,
                 padding: EdgeInsets.all(ScreenAdapter.width(20)),
                 child: Column(
-                  children: <Widget>[
-                    _checkOutItem(),
-                    const Divider(),
-                    _checkOutItem(),
-                    const  Divider(),
-                    _checkOutItem()
-                  ],
-                ),
+                    children: checkOutProvider.checkOutListData.map((value) {
+                      return Column(
+                        children: <Widget>[_checkOutItem(value), const Divider()],
+                      );
+                    }).toList()),
               ),
               const SizedBox(height: 20),
               Container(
@@ -106,7 +109,7 @@ class _CheckOutState extends State<CheckOut> {
                 padding: EdgeInsets.all(ScreenAdapter.width(20)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children:const <Widget>[
+                  children: const <Widget>[
                     Text("商品总金额:￥100"),
                     Divider(),
                     Text("立减:￥5"),
@@ -118,16 +121,17 @@ class _CheckOutState extends State<CheckOut> {
             ],
           ),
           Positioned(
-            bottom: 26,
+            bottom: 0,
             width: ScreenAdapter.width(750),
             height: ScreenAdapter.height(100),
             child: Container(
+              padding: const EdgeInsets.all(5),
               width: ScreenAdapter.width(750),
               height: ScreenAdapter.height(100),
-              decoration:const BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Colors.white,
                   border:
-                      Border(top: BorderSide(width: 1, color: Colors.black26))),
+                  Border(top: BorderSide(width: 1, color: Colors.black26))),
               child: Stack(
                 children: <Widget>[
                   const Align(
@@ -151,3 +155,4 @@ class _CheckOutState extends State<CheckOut> {
     );
   }
 }
+
