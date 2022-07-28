@@ -16,15 +16,11 @@ class _CartNumState extends State<CartNum> {
   late Map _itemData;
 
   dynamic cartProvider;
-  @override
-  void initState() {
-    super.initState();
-    _itemData = widget._itemData;
-  }
-
 
   @override
   Widget build(BuildContext context) {
+    _itemData = widget._itemData;
+
     cartProvider = Provider.of<CartProvider>(context);
 
     return Container(
@@ -43,7 +39,7 @@ class _CartNumState extends State<CartNum> {
   Widget _leftBtn() {
     return InkWell(
       onTap: () {
-        if(_itemData["count"]>1){
+        if (_itemData["count"] > 1) {
           _itemData["count"]--;
           cartProvider.itemCountChange();
         }

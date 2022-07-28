@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import '../model/product_content_model.dart';
 import '../serivces/screen_adapter.dart';
@@ -163,10 +164,14 @@ class _ProductContentState extends State<ProductContent>
                                 if (_productContentList[0].attr.length > 0) {
                                   eventBus.fire(ProductContentEvent("加入购物车"));
                                 } else {
-                                  print("加入购物车");
+                                  if (kDebugMode) {
+                                    print("加入购物车");
+                                  }
                                   await CartServices.addCart(_productContentList[0]);
                                   cartProvider.updateCartList();
-
+                                  Fluttertoast.showToast(
+                                    msg: '加入购物车成功',
+                                    toastLength: Toast.LENGTH_SHORT,gravity: ToastGravity.CENTER,);
                                 }
                               },
                             ),

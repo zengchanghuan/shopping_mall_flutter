@@ -18,14 +18,9 @@ class _CartItemState extends State<CartItem> {
   late Map _itemData;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _itemData = widget._itemData;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    //注意：给属性赋值
+    _itemData = widget._itemData;
     var cartProvider = Provider.of<CartProvider>(context);
 
     return Container(
@@ -40,7 +35,7 @@ class _CartItemState extends State<CartItem> {
             child: Checkbox(
               value: _itemData["checked"],
               onChanged: (val) {
-                _itemData["checked"]=!_itemData["checked"];
+                _itemData["checked"] = !_itemData["checked"];
                 cartProvider.itemChange();
               },
               activeColor: Colors.pink,
@@ -48,9 +43,7 @@ class _CartItemState extends State<CartItem> {
           ),
           SizedBox(
             width: ScreenAdapter.width(160),
-            child: Image.network(
-                "${_itemData["pic"]}",
-                fit: BoxFit.cover),
+            child: Image.network("${_itemData["pic"]}", fit: BoxFit.cover),
           ),
           Expanded(
             flex: 1,
@@ -60,14 +53,13 @@ class _CartItemState extends State<CartItem> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                   Text(
-                      "${_itemData["title"]}",
-                      maxLines: 2),
+                  Text("${_itemData["title"]}", maxLines: 2),
                   Stack(
-                    children:  <Widget>[
+                    children: <Widget>[
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("￥${_itemData["price"]}", style: const TextStyle(color: Colors.red)),
+                        child: Text("￥${_itemData["price"]}",
+                            style: const TextStyle(color: Colors.red)),
                       ),
                       Align(
                         alignment: Alignment.centerRight,

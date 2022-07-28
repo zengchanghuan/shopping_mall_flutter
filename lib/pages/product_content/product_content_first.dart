@@ -9,6 +9,8 @@ import '../../config/config.dart';
 import '../../serivces/event_bus.dart';
 import '../product_content/cart_count.dart';
 import '../../provider/cart_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 class ProductContentFirst extends StatefulWidget {
   final List _productContentList;
 
@@ -126,7 +128,10 @@ class _ProductContentFirstState extends State<ProductContentFirst>
             _changeAttr(attrItem.cate, item["title"], setBottomState);
           },
           child: Chip(
-            label: Text("${item["title"]}"),
+            label: Text("${item["title"]}",style: TextStyle(
+                color:  item["checked"] ? Colors.white : Colors.black54
+
+            ),),
             padding: const EdgeInsets.all(10),
             backgroundColor: item["checked"] ? Colors.red : Colors.black26,
           ),
@@ -219,6 +224,8 @@ class _ProductContentFirstState extends State<ProductContentFirst>
                                 if (!mounted) return;
                                 Navigator.of(context).pop();
                                 cartProvider.updateCartList();
+                                Fluttertoast.showToast( msg: '加入购物车成功', toastLength: Toast.LENGTH_SHORT,gravity: ToastGravity.CENTER,);
+
                               },
                             ),
                           ),
