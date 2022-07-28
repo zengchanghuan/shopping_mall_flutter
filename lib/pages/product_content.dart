@@ -134,19 +134,24 @@ class _ProductContentState extends State<ProductContent>
                           color: Colors.white),
                       child: Row(
                         children: <Widget>[
-                          Container(
-                            padding:
-                                EdgeInsets.only(top: ScreenAdapter.height(10)),
-                            width: 100,
-                            height: ScreenAdapter.height(88),
-                            child: Column(
-                              children: <Widget>[
-                                Icon(Icons.shopping_cart,
-                                    size: ScreenAdapter.size(38)),
-                                Text("购物车",
-                                    style: TextStyle(
-                                        fontSize: ScreenAdapter.size(24)))
-                              ],
+                          InkWell(
+                            onTap: (){
+                              Navigator.pushNamed(context, '/cart');
+                            },
+                            child: Container(
+                              padding:
+                                  EdgeInsets.only(top: ScreenAdapter.height(10)),
+                              width: 100,
+                              height: ScreenAdapter.height(88),
+                              child: Column(
+                                children: <Widget>[
+                                  Icon(Icons.shopping_cart,
+                                      size: ScreenAdapter.size(38)),
+                                  Text("购物车",
+                                      style: TextStyle(
+                                          fontSize: ScreenAdapter.size(24)))
+                                ],
+                              ),
                             ),
                           ),
                           Expanded(

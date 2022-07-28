@@ -3,10 +3,12 @@ import '../pages/tabs/Tabs.dart';
 import '../pages/search.dart';
 import '../pages/product_list.dart';
 import '../pages/product_content.dart';
+import '../pages/tabs/cart.dart';
 //配置路由
 final Map<String, Function> routes = {
   '/': (context) => const Tabs(),
   '/search': (context) => const Search(),
+  '/cart': (context) => const CartPage(),
   '/productList': (context,{arguments}) => ProductList(arguments:arguments),
   '/productContent': (context,{arguments}) => ProductContent(arguments:arguments),
   
