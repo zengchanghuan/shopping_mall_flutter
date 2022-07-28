@@ -6,9 +6,13 @@ import '../serivces/storage.dart';
 class CartProvider with ChangeNotifier {
   List _cartList = []; //状态
   bool _isCheckedAll = false; //状态
+  double _allPrice = 0; //总价
+
   List get cartList => _cartList;
 
   bool get isCheckedAll => _isCheckedAll;
+
+  double get allPrice => _allPrice;
 
   CartProvider() {
     init();
@@ -26,6 +30,7 @@ class CartProvider with ChangeNotifier {
     }
     //获取全选的状态
     _isCheckedAll = isCheckAll();
+    computeAllPrice();
     notifyListeners();
   }
 
@@ -37,6 +42,7 @@ class CartProvider with ChangeNotifier {
   //数量改变触发的方法
   itemCountChange() {
     Storage.setString("cartList", json.encode(_cartList));
+    computeAllPrice();
     notifyListeners();
   }
 
@@ -46,6 +52,8 @@ class CartProvider with ChangeNotifier {
       _cartList[i]["checked"] = value;
     }
     _isCheckedAll = value;
+    computeAllPrice();
+
     Storage.setString("cartList", json.encode(_cartList));
     notifyListeners();
   }
@@ -70,7 +78,34 @@ class CartProvider with ChangeNotifier {
     } else {
       _isCheckedAll = false;
     }
+    computeAllPrice();
+    Storage.setString("cartList", json.encode(_cartList));
+    notifyListeners();
+  }
 
+  //计算总价
+  computeAllPrice() {
+    double tempAllPrice = 0;
+    for (var i = 0; i < _cartList.length; i++) {
+      if (_cartList[i]["checked"] == true) {
+        tempAllPrice += _cartList[i]["price"] * _cartList[i]["count"];
+      }
+    }
+    _allPrice = tempAllPrice;
+    notifyListeners();
+  }
+
+  //删除数据
+  removeItem() {
+    List tempList = [];
+    for (var i = 0; i < _cartList.length; i++) {
+      if (_cartList[i]["checked"] == false) {
+        tempList.add(_cartList[i]);
+      }
+    }
+    _cartList = tempList;
+    //计算总价
+    computeAllPrice();
     Storage.setString("cartList", json.encode(_cartList));
     notifyListeners();
   }
