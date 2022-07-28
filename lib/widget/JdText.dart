@@ -4,17 +4,17 @@ import '../serivces/screen_adapter.dart';
 class JdText extends StatelessWidget {
   final String text;
   final bool password;
-  dynamic onChanged;
+  final dynamic onChanged;
   final int maxLines;
   final double height;
 
-  JdText(
+  const JdText(
       {Key? key,
-        this.text = "输入内容",
-        this.password = false,
-        this.onChanged,
-        this.maxLines = 1,
-        this.height = 68})
+      this.text = "输入内容",
+      this.password = false,
+      required this.onChanged,
+      this.maxLines = 1,
+      this.height = 68})
       : super(key: key);
 
   @override
